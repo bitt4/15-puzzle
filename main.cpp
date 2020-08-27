@@ -11,6 +11,8 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    /* Create window */
+
     SDL_Window *window = SDL_CreateWindow("15-puzzle",
                                           SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED,
@@ -21,6 +23,8 @@ int main(int argc, char *argv[]){
         std::cerr << "Window creation failed: " << SDL_GetError() << "\n";
         return EXIT_FAILURE;
     }
+
+    /* Create renderer */
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window,
                                                 -1,
