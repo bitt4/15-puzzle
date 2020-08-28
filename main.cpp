@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <SDL2/SDL.h>
 
+#include "puzzle.hpp"
+
 int main(int argc, char *argv[]){
 
     /* Initialize SDL */
@@ -34,6 +36,9 @@ int main(int argc, char *argv[]){
         std::cerr << "Renderer creation failed: " << SDL_GetError() << "\n";
         return EXIT_FAILURE;
     }
+
+    puzzle puzzle(renderer);
+    puzzle.renderInit();
 
     SDL_Event e;
     int quit = 0;
