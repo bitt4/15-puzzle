@@ -13,6 +13,12 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    /* Initialize TTF */
+    if(TTF_Init() == -1){
+        std::cerr << "SDL TTF initialization error: " << TTF_GetError() << "\n";
+        return EXIT_FAILURE;
+    }
+
     /* Create window */
 
     SDL_Window *window = SDL_CreateWindow("15-puzzle",
