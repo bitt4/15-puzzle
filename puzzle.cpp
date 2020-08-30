@@ -3,7 +3,7 @@
 puzzle::puzzle(SDL_Renderer *renderer)
     :renderer(renderer)
 {
-    this->defaultFont = TTF_OpenFont("Arial.ttf", 96);
+    this->defaultFont = TTF_OpenFont("Arial.ttf", 72);
     this->fontColor = {255, 255, 255, 255};
 }
 
@@ -38,17 +38,24 @@ void puzzle::renderValue(){
 
     for(int y = 0; y < 4; y++){
         for(int x = 0; x < 4; x++){
-            cellText = TTF_RenderText_Solid(this->defaultFont,
-                                            std::to_string(y * 4 + x).c_str(),
-                                            this->fontColor);
+            int textWidth, textHeight;
+
+            TTF_SizeText(this->defaultFont,
+                         std::to_string(y * 4 + x).c_str(),
+                         &textWidth,
+                         &textHeight);
+
+            cellText = TTF_RenderText_Blended(this->defaultFont,
+                                              std::to_string(y * 4 + x).c_str(),
+                                              this->fontColor);
 
             cellTexture = SDL_CreateTextureFromSurface(this->renderer, cellText);
 
             SDL_Rect cellRectangle;
-            cellRectangle.x = x * 150 + x;
-            cellRectangle.y = y * 150 + y;
-            cellRectangle.w = 150;
-            cellRectangle.h = 150;
+            cellRectangle.x = x * 150 + x + (150-textWidth)/2;
+            cellRectangle.y = y * 150 + y + (150-textHeight)/2;
+            cellRectangle.w = textWidth;
+            cellRectangle.h = textHeight;
 
             SDL_RenderCopy(this->renderer, cellTexture, NULL, &cellRectangle);
         }
