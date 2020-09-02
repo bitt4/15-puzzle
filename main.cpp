@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
     }
 
     puzzle puzzle(renderer);
-    puzzle.renderInit();
+    puzzle.render();
 
     SDL_Event e;
     int quit = 0;
@@ -54,6 +54,10 @@ int main(int argc, char *argv[]){
             switch(e.type){
             case SDL_QUIT:
                 quit = 1;
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if(e.button.button == SDL_BUTTON_LEFT)
+                    puzzle.click(e.button.x / 150, e.button.y / 160);
                 break;
             default: {}
             }
