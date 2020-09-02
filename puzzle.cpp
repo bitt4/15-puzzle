@@ -13,6 +13,10 @@ puzzle::puzzle(SDL_Renderer *renderer)
     for(int i = 0; i < 16; i++){
         this->tiles[i] = i;
     }
+
+    /* TODO: Check if current configuration is solvable, more information on
+     * https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
+     */
 }
 
 puzzle::~puzzle(){
