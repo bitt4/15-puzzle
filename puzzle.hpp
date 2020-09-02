@@ -11,6 +11,7 @@ private:
     int *tiles;
 public:
     puzzle(SDL_Renderer* renderer);
+    ~puzzle();
     void renderInit();
     void renderValue();
 };

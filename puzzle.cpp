@@ -14,6 +14,10 @@ puzzle::puzzle(SDL_Renderer *renderer)
     }
 }
 
+puzzle::~puzzle(){
+    free(this->tiles);
+}
+
 void puzzle::renderInit(){
     /* Render black empty board */
     SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
