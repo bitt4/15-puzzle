@@ -79,19 +79,28 @@ void puzzle::renderValue(){
 }
 
 void puzzle::swapTiles(int x, int y){
-    /* TODO: check if target tile is next to empty tile */
+    /* return immediately if user clicks on empty tile */
+    if(this->tiles[y * 4 +x] == 0)
+        return;
 
     /* Search for empty tile */
-    int emptyTilePosition;
-    for(int i = 0; i < 16; i++){
-        if(!this->tiles[i]){
-            emptyTilePosition = i;
+    int emptyTilePosX, emptyTilePosY;
+    for(int emptyY = 0; emptyY < 4; emptyY++){
+        for(int emptyX = 0; emptyX < 4; emptyX++){
+            if(!this->tiles[emptyY * 4 + emptyX]){
+                emptyTilePosX = emptyX;
+                emptyTilePosY = emptyY;
+                break; /* Since there is only one empty tile */
+            }
         }
     }
 
-    int temp = this->tiles[y * 4 + x];
-    this->tiles[y * 4 + x] = 0;
-    this->tiles[emptyTilePosition] = temp;
+    /* Check if target tile is next to empty tile */
+    if(abs(emptyTilePosX - x) + abs(emptyTilePosY - y) == 1){
+        int temp = this->tiles[y * 4 + x];
+        this->tiles[y * 4 + x] = 0;
+        this->tiles[emptyTilePosY * 4 + emptyTilePosX] = temp;
+    }
 }
 
 void puzzle::click(int x, int y){
