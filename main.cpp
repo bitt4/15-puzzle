@@ -47,13 +47,12 @@ int main(int argc, char *argv[]){
     puzzle.render();
 
     SDL_Event e;
-    int quit = 0;
 
-    while(!quit){
+    while(!puzzle.getEndGame()){
         while(SDL_PollEvent(&e)){
             switch(e.type){
             case SDL_QUIT:
-                quit = 1;
+                puzzle.quit();
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 if(e.button.button == SDL_BUTTON_LEFT)
