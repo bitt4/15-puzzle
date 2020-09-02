@@ -5,6 +5,13 @@ puzzle::puzzle(SDL_Renderer *renderer)
 {
     this->defaultFont = TTF_OpenFont("Arial.ttf", 72);
     this->fontColor = {255, 255, 255, 255};
+    this->tiles = (int*)calloc(16, sizeof(int));
+
+    /* Initialize tiles */
+    /* TODO: This will be randomized later */
+    for(int i = 0; i < 16; i++){
+        this->tiles[i] = i;
+    }
 }
 
 void puzzle::renderInit(){
@@ -41,12 +48,12 @@ void puzzle::renderValue(){
             int textWidth, textHeight;
 
             TTF_SizeText(this->defaultFont,
-                         std::to_string(y * 4 + x).c_str(),
+                         std::to_string(this->tiles[y * 4 + x]).c_str(),
                          &textWidth,
                          &textHeight);
 
             cellText = TTF_RenderText_Blended(this->defaultFont,
-                                              std::to_string(y * 4 + x).c_str(),
+                                              std::to_string(this->tiles[y * 4 + x]).c_str(),
                                               this->fontColor);
 
             cellTexture = SDL_CreateTextureFromSurface(this->renderer, cellText);
