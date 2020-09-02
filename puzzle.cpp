@@ -1,7 +1,8 @@
 #include "puzzle.hpp"
 
 puzzle::puzzle(SDL_Renderer *renderer)
-    :renderer(renderer)
+    :renderer(renderer),
+     endGame(false)
 {
     this->defaultFont = TTF_OpenFont("Arial.ttf", 72);
     this->fontColor = {255, 255, 255, 255};
@@ -106,4 +107,23 @@ void puzzle::swapTiles(int x, int y){
 void puzzle::click(int x, int y){
     swapTiles(x, y);
     render();
+    if(isGameOver())
+        this->endGame = true;
+}
+
+bool puzzle::isGameOver(){
+    for(int i = 0; i < 16; i++){
+        if(this->tiles[i] != (i+1)%16)
+            return false;
+    }
+
+    return true;
+}
+
+bool puzzle::getEndGame(){
+    return this->endGame;
+}
+
+void puzzle::quit(){
+    this->endGame = true;
 }
