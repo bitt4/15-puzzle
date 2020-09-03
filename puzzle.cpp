@@ -154,7 +154,7 @@ bool puzzle::isSolvable(){
         }
     }
 
- exitTwoNestedForLoops:
+ exitNestedForLoops:
     if(evenBlankPositionFromBottom && inversions % 2 == 1){
         return true;
     }
