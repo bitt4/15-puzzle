@@ -15,6 +15,7 @@ private:
     void swapTiles(int target_x, int target_y);
     void renderValue();
     bool isGameOver();
+    bool isSolvable();
 public:
     puzzle(SDL_Renderer* renderer);
     ~puzzle();
