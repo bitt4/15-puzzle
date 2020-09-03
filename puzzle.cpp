@@ -14,9 +14,7 @@ puzzle::puzzle(SDL_Renderer *renderer)
         this->tiles[i] = i;
     }
 
-    /* TODO: Check if current configuration is solvable, more information on
-     * https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
-     */
+    /* TODO: Check if current configuration is solvable */
 }
 
 puzzle::~puzzle(){
@@ -130,4 +128,38 @@ bool puzzle::getEndGame(){
 
 void puzzle::quit(){
     this->endGame = true;
+}
+
+bool puzzle::isSolvable(){
+    /* This site has very good explanation */
+    /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
+
+    int inversions = 0;
+    for(int i = 0; i < 16; i++){
+        int currentValue = this->tiles[i];
+        for(int j = i; j < 16; j++){
+            if(currentValue > this->tiles[j])
+                inversions++;
+        }
+    }
+
+    bool evenBlankPositionFromBottom;
+
+    for(int i = 3; i >= 0; i--){
+        for(int j = 0; j < 4; j++){
+            if(this->tiles[i * 4 + j] == 0){
+                evenBlankPositionFromBottom = (i % 2 == 0);
+                goto exitNestedForLoops; /* lmao, this is the first time I used goto, I hope it's okay in this situation */
+            }
+        }
+    }
+
+ exitTwoNestedForLoops:
+    if(evenBlankPositionFromBottom && inversions % 2 == 1){
+        return true;
+    }
+    else if(evenBlankPositionFromBottom == false && inversions % 2 == 0){
+        return true;
+    }
+    return false;
 }
