@@ -9,13 +9,14 @@ class puzzle{
 private:
     SDL_Renderer *renderer;
     TTF_Font* defaultFont;
-    SDL_Color fontColor;
+    SDL_Color fontColor, winColor;
     int *tiles;
     bool endGame;
 
     /* Swap target tile with the empty one */
     void swapTiles(int target_x, int target_y);
     void renderValue();
+    void renderValue(SDL_Color color);
     bool isGameOver();
     bool isSolvable();
 public:
