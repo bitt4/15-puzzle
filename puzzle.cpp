@@ -14,6 +14,20 @@ puzzle::puzzle(SDL_Renderer *renderer)
         this->tiles[i] = i;
     }
 
+    /* Shuffle tiles (looks random)*/
+    srand(time(0));
+    int currentPos, lastPos = 0;
+
+    while(!isSolvable()) {
+        for(int i = 0; i < 100; i++){
+            currentPos = rand()%16;
+            int tmp = this->tiles[currentPos];
+            this->tiles[currentPos] = this->tiles[lastPos];
+            this->tiles[lastPos] = tmp;
+            lastPos = currentPos;
+        }
+    }
+
     /* TODO: Check if current configuration is solvable */
 }
 
@@ -137,7 +151,7 @@ bool puzzle::isSolvable(){
     int inversions = 0;
     for(int i = 0; i < 16; i++){
         int currentValue = this->tiles[i];
-        for(int j = i; j < 16; j++){
+        for(int j = i + 1; j < 16; j++){
             if(currentValue > this->tiles[j])
                 inversions++;
         }
@@ -158,7 +172,7 @@ bool puzzle::isSolvable(){
     if(evenBlankPositionFromBottom && inversions % 2 == 1){
         return true;
     }
-    else if(evenBlankPositionFromBottom == false && inversions % 2 == 0){
+    else if(!evenBlankPositionFromBottom && inversions % 2 == 0){
         return true;
     }
     return false;
