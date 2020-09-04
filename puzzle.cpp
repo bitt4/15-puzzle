@@ -35,12 +35,17 @@ puzzle::~puzzle(){
 }
 
 void puzzle::render(){
+    SDL_Color white = {255, 255, 255, 255};
+    render(white);
+}
+
+void puzzle::render(SDL_Color color){
     /* Render black empty board */
     SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
 
     /* Render lines */
-    SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
     for(int i = 1; i < 4; i++){
         SDL_RenderDrawLine(this->renderer,
                            150 * i + i,
@@ -55,7 +60,7 @@ void puzzle::render(){
                            150 * i + i);
     }
 
-    renderValue();
+    renderValue(color);
     SDL_RenderPresent(renderer);
 }
 
@@ -131,7 +136,7 @@ void puzzle::click(int x, int y){
         swapTiles(x, y);
         render();
         if(isGameOver()){
-            renderValue(this->winColor);
+            render(this->winColor);
             SDL_RenderPresent(renderer);
             this->gameOver = true;
         }
