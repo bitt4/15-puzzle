@@ -23,6 +23,7 @@ public:
     puzzle(SDL_Renderer* renderer);
     ~puzzle();
     void render();
+    void render(SDL_Color color);
     void click(int x, int y);
     bool getEndGame();
     void quit();
