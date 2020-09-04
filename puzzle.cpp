@@ -3,7 +3,8 @@
 puzzle::puzzle(SDL_Renderer *renderer)
     :renderer(renderer),
      winColor({.r = 0, .g = 255, .b = 0}),
-     endGame(false)
+     endGame(false),
+     gameOver(false)
 {
     this->defaultFont = TTF_OpenFont("Arial.ttf", 72);
     this->fontColor = {255, 255, 255, 255};
@@ -123,10 +124,18 @@ void puzzle::swapTiles(int x, int y){
 }
 
 void puzzle::click(int x, int y){
-    swapTiles(x, y);
-    render();
-    if(isGameOver())
-        this->endGame = true;
+    if(this->gameOver){
+        quit();
+    }
+    else {
+        swapTiles(x, y);
+        render();
+        if(isGameOver()){
+            renderValue(this->winColor);
+            SDL_RenderPresent(renderer);
+            this->gameOver = true;
+        }
+    }
 }
 
 bool puzzle::isGameOver(){
@@ -151,10 +160,11 @@ bool puzzle::isSolvable(){
     /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
 
     int inversions = 0;
-    for(int i = 0; i < 16; i++){
+    for(int i = 0; i < 15; i++){
         int currentValue = this->tiles[i];
         for(int j = i + 1; j < 16; j++){
-            if(currentValue > this->tiles[j])
+            /* Skip blank tile */
+            if(currentValue && tiles[j] && currentValue > this->tiles[j])
                 inversions++;
         }
     }
@@ -171,11 +181,8 @@ bool puzzle::isSolvable(){
     }
 
  exitNestedForLoops:
-    if(evenBlankPositionFromBottom && inversions % 2 == 1){
-        return true;
-    }
-    else if(!evenBlankPositionFromBottom && inversions % 2 == 0){
-        return true;
-    }
-    return false;
+    if(evenBlankPositionFromBottom)
+        return inversions % 2 == 1;
+    else
+        return inversions % 2 == 0;
 }

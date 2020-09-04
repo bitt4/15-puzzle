@@ -11,7 +11,7 @@ private:
     TTF_Font* defaultFont;
     SDL_Color fontColor, winColor;
     int *tiles;
-    bool endGame;
+    bool endGame, gameOver;
 
     /* Swap target tile with the empty one */
     void swapTiles(int target_x, int target_y);
