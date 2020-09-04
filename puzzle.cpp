@@ -2,6 +2,7 @@
 
 puzzle::puzzle(SDL_Renderer *renderer)
     :renderer(renderer),
+     winColor({.r = 0, .g = 255, .b = 0}),
      endGame(false)
 {
     this->defaultFont = TTF_OpenFont("Arial.ttf", 72);
@@ -9,7 +10,6 @@ puzzle::puzzle(SDL_Renderer *renderer)
     this->tiles = (int*)calloc(16, sizeof(int));
 
     /* Initialize tiles */
-    /* TODO: This will be randomized later */
     for(int i = 0; i < 16; i++){
         this->tiles[i] = i;
     }
@@ -27,8 +27,6 @@ puzzle::puzzle(SDL_Renderer *renderer)
             lastPos = currentPos;
         }
     }
-
-    /* TODO: Check if current configuration is solvable */
 }
 
 puzzle::~puzzle(){
@@ -61,6 +59,10 @@ void puzzle::render(){
 }
 
 void puzzle::renderValue(){
+    renderValue(this->fontColor);
+}
+
+void puzzle::renderValue(SDL_Color color){
     SDL_Surface* cellText;
     SDL_Texture* cellTexture;
 
@@ -76,7 +78,7 @@ void puzzle::renderValue(){
 
                 cellText = TTF_RenderText_Blended(this->defaultFont,
                                                   std::to_string(this->tiles[y * 4 + x]).c_str(),
-                                                  this->fontColor);
+                                                  color);
 
                 cellTexture = SDL_CreateTextureFromSurface(this->renderer, cellText);
 
