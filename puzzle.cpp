@@ -17,6 +17,10 @@ puzzle::puzzle(SDL_Renderer *renderer)
 
     /* Shuffle tiles (looks random)*/
     srand(time(0));
+    shuffle();
+}
+
+void puzzle::shuffle(){
     int currentPos, lastPos = 0;
 
     while(!isSolvable()) {
@@ -28,6 +32,7 @@ puzzle::puzzle(SDL_Renderer *renderer)
             lastPos = currentPos;
         }
     }
+
 }
 
 puzzle::~puzzle(){

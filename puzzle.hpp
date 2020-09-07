@@ -19,6 +19,7 @@ private:
     void renderValue(SDL_Color color);
     bool isGameOver();
     bool isSolvable();
+    void shuffle();
 public:
     puzzle(SDL_Renderer* renderer);
     ~puzzle();
