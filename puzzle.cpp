@@ -16,12 +16,17 @@ puzzle::puzzle(SDL_Renderer *renderer)
     }
 
     /* Shuffle tiles (looks random)*/
-    srand(time(0));
     shuffle();
 }
 
 void puzzle::shuffle(){
     int currentPos, lastPos = 0;
+    srand(time(0));
+
+    /* Initialize tiles again, because when shuffling completed game, it's already solvable */
+    for(int i = 0; i < 16; i++){
+        this->tiles[i] = i;
+    }
 
     while(!isSolvable()) {
         for(int i = 0; i < 100; i++){
@@ -135,7 +140,7 @@ void puzzle::swapTiles(int x, int y){
 
 void puzzle::click(int x, int y){
     if(this->gameOver){
-        quit();
+        restart();
     }
     else {
         swapTiles(x, y);
@@ -195,4 +200,12 @@ bool puzzle::isSolvable(){
         return inversions % 2 == 1;
     else
         return inversions % 2 == 0;
+}
+
+void puzzle::restart(){
+    this->gameOver = false;
+    this->endGame = false;
+    shuffle();
+    render();
+    SDL_RenderPresent(renderer);
 }
