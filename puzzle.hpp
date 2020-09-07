@@ -20,6 +20,7 @@ private:
     bool isGameOver();
     bool isSolvable();
     void shuffle();
+    void restart();
 public:
     puzzle(SDL_Renderer* renderer);
     ~puzzle();
