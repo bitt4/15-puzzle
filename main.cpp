@@ -45,6 +45,7 @@ int main(int argc, char *argv[]){
 
     puzzle puzzle(renderer);
     puzzle.render();
+    SDL_RenderPresent(renderer);
 
     SDL_Event e;
 
