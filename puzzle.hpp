@@ -27,6 +27,7 @@ public:
     void render();
     void render(SDL_Color color);
     void click(int x, int y);
+    void keydown(SDL_Keycode key);
     bool getEndGame();
     void quit();
 };
