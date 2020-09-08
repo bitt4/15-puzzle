@@ -71,7 +71,6 @@ void puzzle::render(SDL_Color color){
     }
 
     renderValue(color);
-    SDL_RenderPresent(renderer);
 }
 
 void puzzle::renderValue(){
@@ -147,10 +146,10 @@ void puzzle::click(int x, int y){
         render();
         if(isGameOver()){
             render(this->winColor);
-            SDL_RenderPresent(renderer);
             this->gameOver = true;
         }
     }
+    SDL_RenderPresent(renderer);
 }
 
 bool puzzle::isGameOver(){
@@ -207,5 +206,4 @@ void puzzle::restart(){
     this->endGame = false;
     shuffle();
     render();
-    SDL_RenderPresent(renderer);
 }
