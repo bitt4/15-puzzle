@@ -152,6 +152,70 @@ void puzzle::click(int x, int y){
     SDL_RenderPresent(renderer);
 }
 
+void puzzle::keydown(SDL_Keycode key){
+    if(this->gameOver){
+        restart();
+        SDL_RenderPresent(renderer);
+    }
+    else {
+        switch(key){
+        case SDLK_DOWN:
+            for(int y = 0; y < 4; y++){
+                for(int x = 0; x < 4; x++){
+                    if(!this->tiles[y * 4 + x] && y - 1 >= 0){
+                        swapTiles(x, y-1);
+                        goto exit;
+                    }
+                }
+            }
+            break;
+        case SDLK_UP:
+            for(int y = 0; y < 4; y++){
+                for(int x = 0; x < 4; x++){
+                    if(!this->tiles[y * 4 + x] && y + 1 <= 3){
+                        swapTiles(x, y+1);
+                        goto exit;
+                    }
+                }
+            }
+            break;
+        case SDLK_LEFT:
+            for(int y = 0; y < 4; y++){
+                for(int x = 0; x < 4; x++){
+                    if(!this->tiles[y * 4 + x] && x + 1 <= 3){
+                        swapTiles(x+1, y);
+                        goto exit;
+                    }
+                }
+            }
+            break;
+        case SDLK_RIGHT:
+            for(int y = 0; y < 4; y++){
+                for(int x = 0; x < 4; x++){
+                    if(!this->tiles[y * 4 + x] && x - 1 >= 0){
+                        swapTiles(x-1, y);
+                        goto exit;
+                    }
+                }
+            }
+            break;
+        default: {}
+        }
+
+    exit:
+        if(isGameOver()){
+            render(this->winColor);
+            this->gameOver = true;
+        }
+        else {
+            render();
+        }
+        SDL_RenderPresent(renderer);
+    }
+}
+
+/* TODO: Remove boilerplate-like searching for empty cell */
+
 bool puzzle::isGameOver(){
     for(int i = 0; i < 16; i++){
         if(this->tiles[i] != (i+1)%16)
