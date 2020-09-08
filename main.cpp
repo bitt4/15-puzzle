@@ -59,6 +59,9 @@ int main(int argc, char *argv[]){
                 if(e.button.button == SDL_BUTTON_LEFT)
                     puzzle.click(e.button.x / (150 + e.button.x / 150), e.button.y / (150 + e.button.y / 150));
                 break;
+            case SDL_KEYDOWN:
+                puzzle.keydown(e.key.keysym.sym);
+                break;
             default: {}
             }
         }
