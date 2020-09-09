@@ -23,12 +23,7 @@ void puzzle::shuffle(){
     int currentPos, lastPos = 0;
     srand(time(0));
 
-    /* Initialize tiles again, because when shuffling completed game, it's already solvable */
-    for(int i = 0; i < 16; i++){
-        this->tiles[i] = i;
-    }
-
-    while(!isSolvable()) {
+    do {
         for(int i = 0; i < 100; i++){
             currentPos = rand()%16;
             int tmp = this->tiles[currentPos];
@@ -37,7 +32,7 @@ void puzzle::shuffle(){
             lastPos = currentPos;
         }
     }
-
+    while(!isSolvable());
 }
 
 puzzle::~puzzle(){
