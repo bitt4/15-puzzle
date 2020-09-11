@@ -266,3 +266,19 @@ void puzzle::restart(){
     shuffle();
     render();
 }
+
+Point puzzle::getEmptyCell(){
+    Point empty;
+
+    for(int y = 0; y < 4; y++){
+        for(int x = 0; x < 4; x++){
+            if(!this->tiles[y * 4 + x]){
+                empty.x = x;
+                empty.y = y;
+                goto getEmptyCellExit;
+            }
+        }
+    }
+ getEmptyCellExit:
+    return empty;
+}
