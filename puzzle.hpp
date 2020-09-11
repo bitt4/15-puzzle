@@ -26,7 +26,7 @@ private:
     bool isSolvable();
     void shuffle();
     void restart();
-    Point getEmptyCell();
+    Point getEmptyTile();
 public:
     puzzle(SDL_Renderer* renderer);
     ~puzzle();
