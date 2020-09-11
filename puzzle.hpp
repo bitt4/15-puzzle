@@ -5,6 +5,11 @@
 #include <random>
 #include <ctime>
 
+typedef struct {
+    int x;
+    int y;
+} Point;
+
 class puzzle{
 private:
     SDL_Renderer *renderer;
@@ -21,6 +26,7 @@ private:
     bool isSolvable();
     void shuffle();
     void restart();
+    Point getEmptyCell();
 public:
     puzzle(SDL_Renderer* renderer);
     ~puzzle();
