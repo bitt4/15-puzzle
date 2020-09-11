@@ -113,16 +113,9 @@ void puzzle::swapTiles(int x, int y){
         return;
 
     /* Search for empty tile */
-    int emptyTilePosX, emptyTilePosY;
-    for(int emptyY = 0; emptyY < 4; emptyY++){
-        for(int emptyX = 0; emptyX < 4; emptyX++){
-            if(!this->tiles[emptyY * 4 + emptyX]){
-                emptyTilePosX = emptyX;
-                emptyTilePosY = emptyY;
-                break; /* Since there is only one empty tile */
-            }
-        }
-    }
+    Point empty = getEmptyTile();
+    int emptyTilePosX = empty.x,
+        emptyTilePosY = empty.y;
 
     /* Check if target tile is next to empty tile */
     if(abs(emptyTilePosX - x) + abs(emptyTilePosY - y) == 1){
@@ -154,46 +147,38 @@ void puzzle::keydown(SDL_Keycode key){
     }
     else {
         switch(key){
-        case SDLK_DOWN:
-            for(int y = 0; y < 4; y++){
-                for(int x = 0; x < 4; x++){
-                    if(!this->tiles[y * 4 + x] && y - 1 >= 0){
-                        swapTiles(x, y-1);
-                        goto exit;
-                    }
-                }
+        case SDLK_DOWN: {
+            Point empty = getEmptyTile();
+            if(empty.y - 1 >= 0){
+                swapTiles(empty.x, empty.y-1);
+                goto exit;
             }
             break;
-        case SDLK_UP:
-            for(int y = 0; y < 4; y++){
-                for(int x = 0; x < 4; x++){
-                    if(!this->tiles[y * 4 + x] && y + 1 <= 3){
-                        swapTiles(x, y+1);
-                        goto exit;
-                    }
-                }
+        }
+        case SDLK_UP: {
+            Point empty = getEmptyTile();
+            if(empty.y + 1 <= 3){
+                swapTiles(empty.x, empty.y+1);
+                goto exit;
             }
             break;
-        case SDLK_LEFT:
-            for(int y = 0; y < 4; y++){
-                for(int x = 0; x < 4; x++){
-                    if(!this->tiles[y * 4 + x] && x + 1 <= 3){
-                        swapTiles(x+1, y);
-                        goto exit;
-                    }
-                }
+        }
+        case SDLK_LEFT: {
+            Point empty = getEmptyTile();
+            if(empty.x + 1 <= 3){
+                swapTiles(empty.x+1, empty.y);
+                goto exit;
             }
             break;
-        case SDLK_RIGHT:
-            for(int y = 0; y < 4; y++){
-                for(int x = 0; x < 4; x++){
-                    if(!this->tiles[y * 4 + x] && x - 1 >= 0){
-                        swapTiles(x-1, y);
-                        goto exit;
-                    }
-                }
+        }
+        case SDLK_RIGHT: {
+            Point empty = getEmptyTile();
+            if(empty.x - 1 >= 0){
+                swapTiles(empty.x-1, empty.y);
+                goto exit;
             }
             break;
+        }
         default: {}
         }
 
@@ -267,7 +252,7 @@ void puzzle::restart(){
     render();
 }
 
-Point puzzle::getEmptyCell(){
+Point puzzle::getEmptyTile(){
     Point empty;
 
     for(int y = 0; y < 4; y++){
