@@ -194,8 +194,6 @@ void puzzle::keydown(SDL_Keycode key){
     }
 }
 
-/* TODO: Remove boilerplate-like searching for empty cell */
-
 bool puzzle::isGameOver(){
     for(int i = 0; i < 16; i++){
         if(this->tiles[i] != (i+1)%16)
@@ -229,16 +227,10 @@ bool puzzle::isSolvable(){
 
     bool evenBlankPositionFromBottom;
 
-    for(int i = 3; i >= 0; i--){
-        for(int j = 0; j < 4; j++){
-            if(this->tiles[i * 4 + j] == 0){
-                evenBlankPositionFromBottom = (i % 2 == 0);
-                goto exitNestedForLoops; /* lmao, this is the first time I used goto, I hope it's okay in this situation */
-            }
-        }
-    }
+    Point empty = getEmptyTile();
 
- exitNestedForLoops:
+    evenBlankPositionFromBottom = (empty.y % 2 == 0);
+
     if(evenBlankPositionFromBottom)
         return inversions % 2 == 1;
     else
@@ -260,10 +252,10 @@ Point puzzle::getEmptyTile(){
             if(!this->tiles[y * 4 + x]){
                 empty.x = x;
                 empty.y = y;
-                goto getEmptyCellExit;
+                goto getEmptyTileExit;
             }
         }
     }
- getEmptyCellExit:
+ getEmptyTileExit:
     return empty;
 }
