@@ -6,7 +6,7 @@ puzzle::puzzle(SDL_Renderer *renderer)
      endGame(false),
      gameOver(false)
 {
-    this->defaultFont = TTF_OpenFont("Arial.ttf", 72);
+    this->defaultFont = TTF_OpenFont("font/Arial.ttf", 72);
     this->fontColor = {255, 255, 255, 255};
     this->tiles = (int*)calloc(16, sizeof(int));
 
