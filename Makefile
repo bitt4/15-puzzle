@@ -6,7 +6,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 LIBS +=-lSDL2main -lSDL2_ttf -lSDL2
-FLAGS +=--std=c++11 -O3
+FLAGS +=--std=c++11 -O3 -Wall
 
 EXE=15-puzzle
 
