@@ -2,14 +2,13 @@
 
 puzzle::puzzle(SDL_Renderer *renderer)
     :renderer(renderer),
+     defaultFont(TTF_OpenFont("font/Arial.ttf", 72)),
+     fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
      winColor({.r = 0, .g = 255, .b = 0}),
+     tiles((int*)calloc(16, sizeof(int))),
      endGame(false),
      gameOver(false)
 {
-    this->defaultFont = TTF_OpenFont("font/Arial.ttf", 72);
-    this->fontColor = {255, 255, 255, 255};
-    this->tiles = (int*)calloc(16, sizeof(int));
-
     /* Initialize tiles */
     for(int i = 0; i < 16; i++){
         this->tiles[i] = i;
@@ -73,8 +72,8 @@ void puzzle::renderValue(){
 }
 
 void puzzle::renderValue(SDL_Color color){
-    SDL_Surface* cellText;
-    SDL_Texture* cellTexture;
+    SDL_Surface* cellText = 0;
+    SDL_Texture* cellTexture = 0;
 
     for(int y = 0; y < 4; y++){
         for(int x = 0; x < 4; x++){
