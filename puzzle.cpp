@@ -2,6 +2,7 @@
 
 puzzle::puzzle(SDL_Renderer *renderer)
     :renderer(renderer),
+     /* TODO: Make font selectable */
      defaultFont(TTF_OpenFont("font/Arial.ttf", 72)),
      fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
      winColor({.r = 0, .g = 255, .b = 0}),
