@@ -57,7 +57,8 @@ int main(int argc, char *argv[]){
                     puzzle.click(e.button.x / (150 + e.button.x / 150), e.button.y / (150 + e.button.y / 150));
                 break;
             case SDL_KEYDOWN:
-                puzzle.keydown(e.key.keysym.sym);
+                if(0x4000004f <= e.key.keysym.sym && e.key.keysym.sym <= 0x40000052) /* if arrow keys are pressed */
+                    puzzle.keydown(e.key.keysym.sym);
                 break;
             default: {}
             }
