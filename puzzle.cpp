@@ -239,7 +239,6 @@ bool puzzle::isSolvable(){
 
 void puzzle::restart(){
     this->gameOver = false;
-    this->endGame = false;
     shuffle();
     render();
 }
