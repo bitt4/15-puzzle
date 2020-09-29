@@ -3,13 +3,19 @@
 puzzle::puzzle(SDL_Renderer *renderer)
     :renderer(renderer),
      /* TODO: Make font selectable */
-     defaultFont(TTF_OpenFont("font/Arial.ttf", 72)),
      fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
      winColor({.r = 0, .g = 255, .b = 0}),
      tiles((int*)calloc(16, sizeof(int))),
      endGame(false),
      gameOver(false)
 {
+    /* Select font */
+    this->defaultFont = TTF_OpenFont("font/Arial.ttf", 72);
+    if(!this->defaultFont){            /* Catch errors */
+        std::cerr << "An error occured while loading font: " << TTF_GetError() << "\n";
+        exit(EXIT_FAILURE);
+    }
+
     /* Initialize tiles */
     for(int i = 0; i < 16; i++){
         this->tiles[i] = i;
