@@ -1,9 +1,8 @@
 #include "puzzle.hpp"
 
-puzzle::puzzle(SDL_Renderer *renderer)
-    :renderer(renderer),
-     /* TODO: Make font selectable */
-     fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
+puzzle::puzzle()
+    /* TODO: Make font selectable */
+    :fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
      winColor({.r = 0, .g = 255, .b = 0}),
      tiles((int*)calloc(16, sizeof(int))),
      endGame(false),
@@ -23,6 +22,10 @@ puzzle::puzzle(SDL_Renderer *renderer)
 
     /* Shuffle tiles (looks random)*/
     shuffle();
+}
+
+void puzzle::setRenderer(SDL_Renderer* renderer){
+    this->renderer = renderer;
 }
 
 void puzzle::shuffle(){

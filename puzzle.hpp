@@ -97,8 +97,9 @@ private:
      */
     Point getEmptyTile();
 public:
-    puzzle(SDL_Renderer* renderer);
+    puzzle();
     ~puzzle();
+    void setRenderer(SDL_Renderer* renderer);
     void render();
     void render(SDL_Color color);
     void click(int x, int y);

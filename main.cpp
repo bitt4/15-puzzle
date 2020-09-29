@@ -18,6 +18,8 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    puzzle puzzle;
+
     /* Create window */
     SDL_Window *window = SDL_CreateWindow("15-puzzle",
                                           SDL_WINDOWPOS_CENTERED,
@@ -45,7 +47,7 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    puzzle puzzle(renderer);
+    puzzle.setRenderer(renderer);
     puzzle.render();
     SDL_RenderPresent(renderer);
 
