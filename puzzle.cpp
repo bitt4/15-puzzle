@@ -11,7 +11,7 @@ puzzle::puzzle()
     /* Select font */
     this->defaultFont = TTF_OpenFont("font/Arial.ttf", 72);
     if(!this->defaultFont){            /* Catch errors */
-        std::cerr << "An error occured while loading font: " << TTF_GetError() << "\n";
+        printFormatError("An error occured while loading font: %s", TTF_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -266,4 +266,27 @@ Point puzzle::getEmptyTile(){
     }
  getEmptyTileExit:
     return empty;
+}
+
+void puzzle::printFormatError(const char* format_string, ...){
+
+    char error_message[256];
+    va_list args;
+    va_start(args, format_string);
+
+    int buffer_size = vsnprintf(error_message, 256, format_string, args);
+    if (buffer_size < 0) {
+        fprintf(stderr, "An error occured\n");
+    }
+
+    va_end(args);
+
+#ifdef _WIN32
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                             "Error",
+                             error_message,
+                             NULL);
+#else
+    fprintf(stderr, "%s\n", error_message);
+#endif
 }
