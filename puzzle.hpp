@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <random>
 #include <ctime>
+#include <cstdarg>
 
 typedef struct {
     int x;
@@ -96,6 +97,8 @@ private:
      * and y (row) array coordinates in `tiles` array
      */
     Point getEmptyTile();
+
+    void printFormatError(const char* format_string, ...);
 public:
     puzzle();
     ~puzzle();
