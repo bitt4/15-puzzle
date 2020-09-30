@@ -292,5 +292,8 @@ void puzzle::printFormatError(const char* format_string, ...){
 }
 
 const char* puzzle::getPath(const char* filename) const {
+    /* TODO: it doesn't work on my linux machine because c_str()
+     * passes reference to a string which is destroyed after this
+     * function, or something like that (idk why it works here) */
     return (std::string(SDL_GetBasePath()) + std::string(filename)).c_str();
 }
