@@ -99,6 +99,7 @@ private:
     Point getEmptyTile();
 
     void printFormatError(const char* format_string, ...);
+    const char* getPath(const char* filename) const;
 public:
     puzzle();
     ~puzzle();

@@ -9,7 +9,7 @@ puzzle::puzzle()
      gameOver(false)
 {
     /* Select font */
-    this->defaultFont = TTF_OpenFont("font/Arial.ttf", 72);
+    this->defaultFont = TTF_OpenFont(getPath("font/Arial.ttf"), 72);
     if(!this->defaultFont){            /* Catch errors */
         printFormatError("An error occured while loading font: %s", TTF_GetError());
         exit(EXIT_FAILURE);
@@ -289,4 +289,8 @@ void puzzle::printFormatError(const char* format_string, ...){
 #else
     fprintf(stderr, "%s\n", error_message);
 #endif
+}
+
+const char* puzzle::getPath(const char* filename) const {
+    return (std::string(SDL_GetBasePath()) + std::string(filename)).c_str();
 }
