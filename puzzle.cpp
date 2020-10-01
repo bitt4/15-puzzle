@@ -6,7 +6,8 @@ puzzle::puzzle()
      winColor({.r = 0, .g = 255, .b = 0}),
      tiles((int*)calloc(16, sizeof(int))),
      endGame(false),
-     gameOver(false)
+     gameOver(false),
+     basePath(SDL_GetBasePath())
 {
     /* Select font */
     this->defaultFont = TTF_OpenFont(getPath("font/Arial.ttf"), 72);
@@ -295,5 +296,5 @@ const char* puzzle::getPath(const char* filename) const {
     /* TODO: it doesn't work on my linux machine because c_str()
      * passes reference to a string which is destroyed after this
      * function, or something like that (idk why it works here) */
-    return (std::string(SDL_GetBasePath()) + std::string(filename)).c_str();
+    return (this->basePath + filename).c_str();
 }
