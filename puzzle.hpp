@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <string>
+#include <cstring>
 #include <iostream>
 #include <cstdlib>
 #include <random>
@@ -48,7 +48,8 @@ private:
      */
     bool gameOver;
 
-    std::string basePath;
+    const char* basePath;
+    char* currentFilePath;
 
     /* Swap target tile with the empty one */
     void swapTiles(int target_x, int target_y);
@@ -101,10 +102,11 @@ private:
     Point getEmptyTile();
 
     void printFormatError(const char* format_string, ...);
-    const char* getPath(const char* filename) const;
+
 public:
     puzzle();
     ~puzzle();
+    const char* getPath(const char* filename);
     void setRenderer(SDL_Renderer* renderer);
     void render();
     void render(SDL_Color color);

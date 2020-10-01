@@ -7,7 +7,8 @@ puzzle::puzzle()
      tiles((int*)calloc(16, sizeof(int))),
      endGame(false),
      gameOver(false),
-     basePath(SDL_GetBasePath())
+     basePath(SDL_GetBasePath()),
+     currentFilePath((char*)malloc(0))
 {
     /* Select font */
     this->defaultFont = TTF_OpenFont(getPath("font/Arial.ttf"), 72);
@@ -292,9 +293,11 @@ void puzzle::printFormatError(const char* format_string, ...){
 #endif
 }
 
-const char* puzzle::getPath(const char* filename) const {
-    /* TODO: it doesn't work on my linux machine because c_str()
-     * passes reference to a string which is destroyed after this
-     * function, or something like that (idk why it works here) */
-    return (this->basePath + filename).c_str();
+const char* puzzle::getPath(const char* filename) {
+    int size = (strlen(this->basePath) + strlen(filename) + 1) * sizeof(char);
+    this->currentFilePath = (char*)realloc(this->currentFilePath, size);
+    memset(this->currentFilePath, 0, size);
+    strcpy(this->currentFilePath, this->basePath);
+    strcat(this->currentFilePath, filename);
+    return this->currentFilePath;
 }
