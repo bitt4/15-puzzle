@@ -48,7 +48,15 @@ private:
      */
     bool gameOver;
 
+    /* Stores path of a directory from which has the executable been
+     * run
+     */
     const char* basePath;
+
+    /* Stores the full path of last file passed to function
+     * puzzle::getPath(const char* filename), basically
+     * `basePath`+`filename`
+     */
     char* currentFilePath;
 
     /* Swap target tile with the empty one */
