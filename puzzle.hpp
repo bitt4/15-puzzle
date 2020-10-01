@@ -48,6 +48,8 @@ private:
      */
     bool gameOver;
 
+    std::string basePath;
+
     /* Swap target tile with the empty one */
     void swapTiles(int target_x, int target_y);
 
