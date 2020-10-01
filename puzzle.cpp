@@ -8,7 +8,7 @@ puzzle::puzzle()
      endGame(false),
      gameOver(false),
      basePath(SDL_GetBasePath()),
-     currentFilePath((char*)malloc(0))
+     currentFilePath((char*)malloc(0)) /* malloc(0) here is used so it can be reallocated and resized later */
 {
     /* Select font */
     this->defaultFont = TTF_OpenFont(getPath("font/Arial.ttf"), 72);
@@ -48,6 +48,7 @@ void puzzle::shuffle(){
 
 puzzle::~puzzle(){
     free(this->tiles);
+    free(this->currentFilePath);
 }
 
 void puzzle::render(){
