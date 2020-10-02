@@ -11,7 +11,7 @@ puzzle::puzzle()
      currentFilePath((char*)malloc(0)) /* malloc(0) here is used so it can be reallocated and resized later */
 {
     /* Select font */
-    this->defaultFont = TTF_OpenFont(getPath("font/Arial.ttf"), 72);
+    this->defaultFont = TTF_OpenFont(getPath("assets/font/Arial.ttf"), 72);
     if(!this->defaultFont){            /* Catch errors */
         printFormatError("An error occured while loading font: %s", TTF_GetError());
         exit(EXIT_FAILURE);
