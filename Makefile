@@ -10,8 +10,8 @@ FLAGS +=--std=c++11 -O3 -Wall
 
 EXE=15-puzzle
 
-15-puzzle: main.cpp puzzle.cpp puzzle.hpp
-	$(CXX) main.cpp puzzle.cpp $(LIBS) -o $(EXE) $(FLAGS)
+15-puzzle: src/main.cpp src/puzzle.cpp src/puzzle.hpp
+	$(CXX) src/main.cpp src/puzzle.cpp $(LIBS) -o $(EXE) $(FLAGS)
 
 clean:
 	rm -f $(EXE)

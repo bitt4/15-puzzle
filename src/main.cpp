@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
     }
 
     /* Set window icon */
-    SDL_Surface *icon = SDL_LoadBMP(puzzle.getPath("icon.bmp"));
+    SDL_Surface *icon = SDL_LoadBMP(puzzle.getPath("assets/icon.bmp"));
     SDL_SetWindowIcon(window, icon);
     SDL_FreeSurface(icon);
 
