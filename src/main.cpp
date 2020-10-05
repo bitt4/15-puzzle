@@ -21,6 +21,7 @@ int main(int argc, char *argv[]){
 
     std::string font_file = "assets/font/Arial.ttf";
 
+    opterr = 0;
     static struct option long_options[] = {
                                            {"font", required_argument, NULL, 'f'},
                                            {"help", no_argument, NULL, 'h'},
