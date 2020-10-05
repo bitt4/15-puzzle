@@ -17,7 +17,7 @@ private:
     SDL_Renderer *renderer;
 
     /* Font by which numbers are rendered */
-    TTF_Font* defaultFont;
+    TTF_Font* font;
 
     /* Colors for rendering numbers in tiles.
      * fontColor: defines default font color of numbers in tiles,
@@ -112,7 +112,7 @@ private:
     void printFormatError(const char* format_string, ...);
 
 public:
-    puzzle();
+    puzzle(const char* font);
     ~puzzle();
     const char* getPath(const char* filename);
     void setRenderer(SDL_Renderer* renderer);
