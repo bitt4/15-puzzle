@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <getopt.h>
 #include <SDL2/SDL.h>
 
 #include "puzzle.hpp"
@@ -18,7 +19,47 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    puzzle puzzle;
+    std::string font_file = "assets/font/Arial.ttf";
+
+    static struct option long_options[] = {
+                                           {"font", required_argument, NULL, 'f'},
+                                           {"help", no_argument, NULL, 'h'},
+                                           {NULL, 0, NULL, 0}
+    };
+
+    int c;
+
+    /* long arguments */
+    while ((c = getopt_long(argc, argv, "f:h", long_options, NULL)) != -1) {
+        switch (c)
+            {
+            case 'f':
+                font_file = optarg;
+                break;
+            case 'h':
+                /* Display help */
+            default: {}
+            }
+    }
+
+    /* short arguments */
+    while ((c = getopt(argc, argv, "f:h")) != -1) {
+        switch (c)
+            {
+            case 'f':
+                font_file = optarg;
+                break;
+            case 'h':
+            case '?':
+                /* Display help */
+            default: {}
+            }
+    }
+
+    /* TODO: Add help message and error checking for arguments that
+     *       don't match format */
+
+    puzzle puzzle(font_file.c_str());
 
     /* Create window */
     SDL_Window *window = SDL_CreateWindow("15-puzzle",
