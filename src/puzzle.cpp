@@ -1,6 +1,6 @@
 #include "puzzle.hpp"
 
-puzzle::puzzle()
+puzzle::puzzle(const char* font)
     /* TODO: Make font selectable */
     :fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
      winColor({.r = 0, .g = 255, .b = 0}),
@@ -8,12 +8,14 @@ puzzle::puzzle()
      endGame(false),
      gameOver(false),
      basePath(SDL_GetBasePath()),
-     currentFilePath((char*)malloc(0)) /* malloc(0) here is used so it can be reallocated and resized later */
+     currentFilePath((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
 {
     /* Select font */
-    this->defaultFont = TTF_OpenFont(getPath("assets/font/Arial.ttf"), 72);
-    if(!this->defaultFont){            /* Catch errors */
-        printFormatError("An error occured while loading font: %s", TTF_GetError());
+    this->font = TTF_OpenFont(getPath(font), 72);
+
+    /* Catch errors */
+    if(!this->font){
+        printFormatError("An error occured while loading font '%s': %s", font, TTF_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -47,6 +49,7 @@ void puzzle::shuffle(){
 }
 
 puzzle::~puzzle(){
+    TTF_CloseFont(this->font);
     free(this->tiles);
     free(this->currentFilePath);
 }
@@ -93,12 +96,12 @@ void puzzle::renderValue(SDL_Color color){
             if(this->tiles[y * 4 + x]){
                 int textWidth, textHeight;
 
-                TTF_SizeText(this->defaultFont,
+                TTF_SizeText(this->font,
                              std::to_string(this->tiles[y * 4 + x]).c_str(),
                              &textWidth,
                              &textHeight);
 
-                cellText = TTF_RenderText_Blended(this->defaultFont,
+                cellText = TTF_RenderText_Blended(this->font,
                                                   std::to_string(this->tiles[y * 4 + x]).c_str(),
                                                   color);
 
