@@ -49,7 +49,6 @@ void puzzle::shuffle(){
 }
 
 puzzle::~puzzle(){
-    TTF_CloseFont(this->font);
     free(this->tiles);
     free(this->currentFilePath);
 }
