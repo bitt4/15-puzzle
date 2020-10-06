@@ -1,7 +1,6 @@
 #include "puzzle.hpp"
 
 puzzle::puzzle(const char* font)
-    /* TODO: Make font selectable */
     :fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
      winColor({.r = 0, .g = 255, .b = 0}),
      tiles((int*)calloc(16, sizeof(int))),
