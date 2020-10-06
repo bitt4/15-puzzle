@@ -5,6 +5,8 @@
 
 #include "puzzle.hpp"
 
+void displayHelp();
+
 int main(int argc, char *argv[]){
 
     /* Initialize SDL */
@@ -38,7 +40,14 @@ int main(int argc, char *argv[]){
                 font_file = optarg;
                 break;
             case 'h':
-                /* Display help */
+                displayHelp();
+                exit(0);
+                break;
+            case '?':
+                fprintf(stderr,
+                        "Unknown option: %s\n"
+                        "Use -h or --help to display list of arguments.\n", optarg);
+                exit(EXIT_FAILURE);
             default: {}
             }
     }
@@ -51,8 +60,11 @@ int main(int argc, char *argv[]){
                 font_file = optarg;
                 break;
             case 'h':
+                displayHelp();
+                exit(0);
+                break;
             case '?':
-                /* Display help */
+                exit(EXIT_FAILURE);
             default: {}
             }
     }
@@ -119,4 +131,16 @@ int main(int argc, char *argv[]){
     SDL_Quit();
 
     return EXIT_SUCCESS;
+}
+
+void displayHelp(){
+    fprintf(stderr,
+            "15 puzzle game\n"
+            "Usage: 15-puzzle [OPTION]...\n"
+            "Example: 15-puzzle -h\n"
+            "\n"
+            "  -h,       --help       |  Print this help message\n"
+            "  -f PATH,  --font PATH  |  Specify the path to the font file\n"
+            "\n"
+            );
 }
