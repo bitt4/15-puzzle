@@ -52,6 +52,12 @@ int main(int argc, char *argv[]){
             }
     }
 
+    /* TODO:
+     * 1. Maybe it's enough to use just one of these getopt functions
+     * 2. Check required argument
+     * 3. Fix `optarg`
+     */
+
     /* short arguments */
     while ((c = getopt(argc, argv, "f:h")) != -1) {
         switch (c)
