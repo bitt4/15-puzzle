@@ -10,7 +10,7 @@ puzzle::puzzle(const char* font)
      currentFilePath((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
 {
     /* Select font */
-    this->font = TTF_OpenFont(getPath(font), 72);
+    this->font = TTF_OpenFont(font, 72);
 
     /* Catch errors */
     if(!this->font){
