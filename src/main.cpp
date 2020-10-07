@@ -23,7 +23,6 @@ int main(int argc, char *argv[]){
 
     std::string font_file = "assets/font/Arial.ttf";
 
-    opterr = 0;
     static struct option long_options[] = {
                                            {"font", required_argument, NULL, 'f'},
                                            {"help", no_argument, NULL, 'h'},
@@ -32,7 +31,6 @@ int main(int argc, char *argv[]){
 
     int c;
 
-    /* long arguments */
     while ((c = getopt_long(argc, argv, "f:h", long_options, NULL)) != -1) {
         switch (c)
             {
@@ -45,38 +43,11 @@ int main(int argc, char *argv[]){
                 break;
             case '?':
                 fprintf(stderr,
-                        "Unknown option: %s\n"
-                        "Use -h or --help to display list of arguments.\n", optarg);
+                        "%s: Use -h or --help to display list of arguments.\n", argv[0]);
                 exit(EXIT_FAILURE);
             default: {}
             }
     }
-
-    /* TODO:
-     * 1. Maybe it's enough to use just one of these getopt functions
-     * 2. Check required argument
-     * 3. Fix `optarg`
-     */
-
-    /* short arguments */
-    while ((c = getopt(argc, argv, "f:h")) != -1) {
-        switch (c)
-            {
-            case 'f':
-                font_file = optarg;
-                break;
-            case 'h':
-                displayHelp();
-                exit(0);
-                break;
-            case '?':
-                exit(EXIT_FAILURE);
-            default: {}
-            }
-    }
-
-    /* TODO: Add help message and error checking for arguments that
-     *       don't match format */
 
     puzzle puzzle(font_file.c_str());
 
