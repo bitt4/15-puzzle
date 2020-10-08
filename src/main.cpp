@@ -87,18 +87,24 @@ int main(int argc, char *argv[]){
     while(!puzzle.getEndGame()){
         while(SDL_PollEvent(&e)){
             switch(e.type){
-            case SDL_QUIT:
-                puzzle.quit();
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                if(e.button.button == SDL_BUTTON_LEFT)
-                    puzzle.click(e.button.x / (150 + e.button.x / 150), e.button.y / (150 + e.button.y / 150));
-                break;
-            case SDL_KEYDOWN:
-                if(0x4000004f <= e.key.keysym.sym && e.key.keysym.sym <= 0x40000052) /* if arrow keys are pressed */
-                    puzzle.keydown(e.key.keysym.sym);
-                break;
-            default: {}
+                case SDL_QUIT:
+                    puzzle.quit();
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    if(e.button.button == SDL_BUTTON_LEFT)
+                        puzzle.click(e.button.x / (150 + e.button.x / 150), e.button.y / (150 + e.button.y / 150));
+                    break;
+                case SDL_KEYDOWN:
+                    switch(e.key.keysym.sym){
+                        case SDLK_UP:
+                        case SDLK_DOWN:
+                        case SDLK_LEFT:
+                        case SDLK_RIGHT:
+                            puzzle.keydown(e.key.keysym.sym);
+                            break;
+                    }
+                    break;
+                default: {}
             }
         }
     }
