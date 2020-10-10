@@ -109,13 +109,27 @@ private:
      */
     Point getEmptyTile();
 
+    /*
+     * Writes a formatted string to stdout (just like printf)
+     * Shows a message box on Windows
+     */
     void printFormatError(const char* format_string, ...);
 
 public:
     puzzle(const char* font);
     ~puzzle();
+
+    /*
+     * Prepends the path where the executable was run from to the
+     * string pointed by `filename`
+     */
     const char* getPath(const char* filename);
+
+    /*
+     * `renderer` setter
+     */
     void setRenderer(SDL_Renderer* renderer);
+
     void render();
     void render(SDL_Color color);
     void click(int x, int y);
