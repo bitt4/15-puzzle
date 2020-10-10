@@ -1,6 +1,6 @@
 #include "puzzle.hpp"
 
-puzzle::puzzle(const char* font)
+Puzzle::Puzzle(const char* font)
     :fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
      winColor({.r = 0, .g = 255, .b = 0}),
      tiles((int*)calloc(16, sizeof(int))),
@@ -27,11 +27,11 @@ puzzle::puzzle(const char* font)
     shuffle();
 }
 
-void puzzle::setRenderer(SDL_Renderer* renderer){
+void Puzzle::setRenderer(SDL_Renderer* renderer){
     this->renderer = renderer;
 }
 
-void puzzle::shuffle(){
+void Puzzle::shuffle(){
     int currentPos, lastPos = 0;
     srand(time(0));
 
@@ -47,17 +47,17 @@ void puzzle::shuffle(){
     while(!isSolvable());
 }
 
-puzzle::~puzzle(){
+Puzzle::~Puzzle(){
     free(this->tiles);
     free(this->currentFilePath);
 }
 
-void puzzle::render(){
+void Puzzle::render(){
     SDL_Color white = {255, 255, 255, 255};
     render(white);
 }
 
-void puzzle::render(SDL_Color color){
+void Puzzle::render(SDL_Color color){
     /* Render black empty board */
     SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
@@ -81,11 +81,11 @@ void puzzle::render(SDL_Color color){
     renderValue(color);
 }
 
-void puzzle::renderValue(){
+void Puzzle::renderValue(){
     renderValue(this->fontColor);
 }
 
-void puzzle::renderValue(SDL_Color color){
+void Puzzle::renderValue(SDL_Color color){
     SDL_Surface* cellText = 0;
     SDL_Texture* cellTexture = 0;
 
@@ -120,7 +120,7 @@ void puzzle::renderValue(SDL_Color color){
     SDL_DestroyTexture(cellTexture);
 }
 
-void puzzle::swapTiles(int x, int y){
+void Puzzle::swapTiles(int x, int y){
     /* return immediately if user clicks on empty tile */
     if(this->tiles[y * 4 +x] == 0)
         return;
@@ -138,7 +138,7 @@ void puzzle::swapTiles(int x, int y){
     }
 }
 
-void puzzle::click(int x, int y){
+void Puzzle::click(int x, int y){
     if(this->gameOver){
         restart();
     }
@@ -153,7 +153,7 @@ void puzzle::click(int x, int y){
     SDL_RenderPresent(renderer);
 }
 
-void puzzle::keydown(SDL_Keycode key){
+void Puzzle::keydown(SDL_Keycode key){
     if(this->gameOver){
         restart();
         SDL_RenderPresent(renderer);
@@ -207,7 +207,7 @@ void puzzle::keydown(SDL_Keycode key){
     }
 }
 
-bool puzzle::isGameOver(){
+bool Puzzle::isGameOver(){
     for(int i = 0; i < 16; i++){
         if(this->tiles[i] != (i+1)%16)
             return false;
@@ -216,15 +216,15 @@ bool puzzle::isGameOver(){
     return true;
 }
 
-bool puzzle::getEndGame(){
+bool Puzzle::getEndGame(){
     return this->endGame;
 }
 
-void puzzle::quit(){
+void Puzzle::quit(){
     this->endGame = true;
 }
 
-bool puzzle::isSolvable(){
+bool Puzzle::isSolvable(){
     /* This site has very good explanation */
     /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
 
@@ -250,13 +250,13 @@ bool puzzle::isSolvable(){
         return inversions % 2 == 0;
 }
 
-void puzzle::restart(){
+void Puzzle::restart(){
     this->gameOver = false;
     shuffle();
     render();
 }
 
-Point puzzle::getEmptyTile(){
+Point Puzzle::getEmptyTile(){
     Point empty;
 
     for(int y = 0; y < 4; y++){
@@ -272,7 +272,7 @@ Point puzzle::getEmptyTile(){
     return empty;
 }
 
-void puzzle::printFormatError(const char* format_string, ...){
+void Puzzle::printFormatError(const char* format_string, ...){
 
     char error_message[256];
     va_list args;
@@ -295,7 +295,7 @@ void puzzle::printFormatError(const char* format_string, ...){
 #endif
 }
 
-const char* puzzle::getPath(const char* filename) {
+const char* Puzzle::getPath(const char* filename) {
     int size = (strlen(this->basePath) + strlen(filename) + 1) * sizeof(char);
     this->currentFilePath = (char*)realloc(this->currentFilePath, size);
     memset(this->currentFilePath, 0, size);
