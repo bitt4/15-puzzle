@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
             }
     }
 
-    puzzle puzzle(font_file.c_str());
+    Puzzle puzzle(font_file.c_str());
 
     /* Create window */
     SDL_Window *window = SDL_CreateWindow("15-puzzle",

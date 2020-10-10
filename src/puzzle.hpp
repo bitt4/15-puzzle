@@ -12,7 +12,7 @@ typedef struct {
     int y;
 } Point;
 
-class puzzle{
+class Puzzle {
 private:
     SDL_Renderer *renderer;
 
@@ -116,8 +116,8 @@ private:
     void printFormatError(const char* format_string, ...);
 
 public:
-    puzzle(const char* font);
-    ~puzzle();
+    Puzzle(const char* font);
+    ~Puzzle();
 
     /*
      * Prepends the path where the executable was run from to the
