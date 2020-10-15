@@ -27,58 +27,27 @@ Puzzle::Puzzle(const char* font)
     shuffle();
 }
 
-void Puzzle::setRenderer(SDL_Renderer* renderer){
-    this->renderer = renderer;
-}
-
-void Puzzle::shuffle(){
-    int currentPos, lastPos = 0;
-    srand(time(0));
-
-    do {
-        for(int i = 0; i < 100; i++){
-            currentPos = rand()%16;
-            int tmp = this->tiles[currentPos];
-            this->tiles[currentPos] = this->tiles[lastPos];
-            this->tiles[lastPos] = tmp;
-            lastPos = currentPos;
-        }
-    }
-    while(!isSolvable());
-}
-
 Puzzle::~Puzzle(){
     free(this->tiles);
     free(this->currentFilePath);
 }
 
-void Puzzle::render(){
-    SDL_Color white = {255, 255, 255, 255};
-    render(white);
-}
+void Puzzle::swapTiles(int x, int y){
+    /* return immediately if user clicks on empty tile */
+    if(this->tiles[y * 4 +x] == 0)
+        return;
 
-void Puzzle::render(SDL_Color color){
-    /* Render black empty board */
-    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
-    SDL_RenderClear(renderer);
+    /* Search for empty tile */
+    Point empty = getEmptyTile();
+    int emptyTilePosX = empty.x,
+        emptyTilePosY = empty.y;
 
-    /* Render lines */
-    SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
-    for(int i = 1; i < 4; i++){
-        SDL_RenderDrawLine(this->renderer,
-                           150 * i + i,
-                           0,
-                           150 * i + i,
-                           150 * 4 + 3);
-
-        SDL_RenderDrawLine(this->renderer,
-                           0,
-                           150 * i + i,
-                           150 * 4 + 3,
-                           150 * i + i);
+    /* Check if target tile is next to empty tile */
+    if(abs(emptyTilePosX - x) + abs(emptyTilePosY - y) == 1){
+        int temp = this->tiles[y * 4 + x];
+        this->tiles[y * 4 + x] = 0;
+        this->tiles[emptyTilePosY * 4 + emptyTilePosX] = temp;
     }
-
-    renderValue(color);
 }
 
 void Puzzle::renderValue(){
@@ -120,22 +89,142 @@ void Puzzle::renderValue(SDL_Color color){
     SDL_DestroyTexture(cellTexture);
 }
 
-void Puzzle::swapTiles(int x, int y){
-    /* return immediately if user clicks on empty tile */
-    if(this->tiles[y * 4 +x] == 0)
-        return;
-
-    /* Search for empty tile */
-    Point empty = getEmptyTile();
-    int emptyTilePosX = empty.x,
-        emptyTilePosY = empty.y;
-
-    /* Check if target tile is next to empty tile */
-    if(abs(emptyTilePosX - x) + abs(emptyTilePosY - y) == 1){
-        int temp = this->tiles[y * 4 + x];
-        this->tiles[y * 4 + x] = 0;
-        this->tiles[emptyTilePosY * 4 + emptyTilePosX] = temp;
+bool Puzzle::isGameOver(){
+    for(int i = 0; i < 16; i++){
+        if(this->tiles[i] != (i+1)%16)
+            return false;
     }
+
+    return true;
+}
+
+bool Puzzle::isSolvable(){
+    /* This site has very good explanation */
+    /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
+
+    int inversions = 0;
+    for(int i = 0; i < 15; i++){
+        int currentValue = this->tiles[i];
+        for(int j = i + 1; j < 16; j++){
+            /* Skip blank tile */
+            if(currentValue && tiles[j] && currentValue > this->tiles[j])
+                inversions++;
+        }
+    }
+
+    bool evenBlankPositionFromBottom;
+
+    Point empty = getEmptyTile();
+
+    evenBlankPositionFromBottom = (empty.y % 2 == 0);
+
+    if(evenBlankPositionFromBottom)
+        return inversions % 2 == 1;
+    else
+        return inversions % 2 == 0;
+}
+
+void Puzzle::shuffle(){
+    int currentPos, lastPos = 0;
+    srand(time(0));
+
+    do {
+        for(int i = 0; i < 100; i++){
+            currentPos = rand()%16;
+            int tmp = this->tiles[currentPos];
+            this->tiles[currentPos] = this->tiles[lastPos];
+            this->tiles[lastPos] = tmp;
+            lastPos = currentPos;
+        }
+    }
+    while(!isSolvable());
+}
+
+void Puzzle::restart(){
+    this->gameOver = false;
+    shuffle();
+    render();
+}
+
+Point Puzzle::getEmptyTile(){
+    Point empty;
+
+    for(int y = 0; y < 4; y++){
+        for(int x = 0; x < 4; x++){
+            if(!this->tiles[y * 4 + x]){
+                empty.x = x;
+                empty.y = y;
+                goto getEmptyTileExit;
+            }
+        }
+    }
+ getEmptyTileExit:
+    return empty;
+}
+
+void Puzzle::printFormatError(const char* format_string, ...){
+
+    char error_message[256];
+    va_list args;
+    va_start(args, format_string);
+
+    int buffer_size = vsnprintf(error_message, 256, format_string, args);
+    if (buffer_size < 0) {
+        fprintf(stderr, "An error occured\n");
+    }
+
+    va_end(args);
+
+#ifdef _WIN32
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                             "Error",
+                             error_message,
+                             NULL);
+#else
+    fprintf(stderr, "%s\n", error_message);
+#endif
+}
+
+const char* Puzzle::getPath(const char* filename) {
+    int size = (strlen(this->basePath) + strlen(filename) + 1) * sizeof(char);
+    this->currentFilePath = (char*)realloc(this->currentFilePath, size);
+    memset(this->currentFilePath, 0, size);
+    strcpy(this->currentFilePath, this->basePath);
+    strcat(this->currentFilePath, filename);
+    return this->currentFilePath;
+}
+
+void Puzzle::setRenderer(SDL_Renderer* renderer){
+    this->renderer = renderer;
+}
+
+void Puzzle::render(){
+    SDL_Color white = {255, 255, 255, 255};
+    render(white);
+}
+
+void Puzzle::render(SDL_Color color){
+    /* Render black empty board */
+    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+
+    /* Render lines */
+    SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
+    for(int i = 1; i < 4; i++){
+        SDL_RenderDrawLine(this->renderer,
+                           150 * i + i,
+                           0,
+                           150 * i + i,
+                           150 * 4 + 3);
+
+        SDL_RenderDrawLine(this->renderer,
+                           0,
+                           150 * i + i,
+                           150 * 4 + 3,
+                           150 * i + i);
+    }
+
+    renderValue(color);
 }
 
 void Puzzle::click(int x, int y){
@@ -207,99 +296,10 @@ void Puzzle::keydown(SDL_Keycode key){
     }
 }
 
-bool Puzzle::isGameOver(){
-    for(int i = 0; i < 16; i++){
-        if(this->tiles[i] != (i+1)%16)
-            return false;
-    }
-
-    return true;
-}
-
 bool Puzzle::getEndGame(){
     return this->endGame;
 }
 
 void Puzzle::quit(){
     this->endGame = true;
-}
-
-bool Puzzle::isSolvable(){
-    /* This site has very good explanation */
-    /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
-
-    int inversions = 0;
-    for(int i = 0; i < 15; i++){
-        int currentValue = this->tiles[i];
-        for(int j = i + 1; j < 16; j++){
-            /* Skip blank tile */
-            if(currentValue && tiles[j] && currentValue > this->tiles[j])
-                inversions++;
-        }
-    }
-
-    bool evenBlankPositionFromBottom;
-
-    Point empty = getEmptyTile();
-
-    evenBlankPositionFromBottom = (empty.y % 2 == 0);
-
-    if(evenBlankPositionFromBottom)
-        return inversions % 2 == 1;
-    else
-        return inversions % 2 == 0;
-}
-
-void Puzzle::restart(){
-    this->gameOver = false;
-    shuffle();
-    render();
-}
-
-Point Puzzle::getEmptyTile(){
-    Point empty;
-
-    for(int y = 0; y < 4; y++){
-        for(int x = 0; x < 4; x++){
-            if(!this->tiles[y * 4 + x]){
-                empty.x = x;
-                empty.y = y;
-                goto getEmptyTileExit;
-            }
-        }
-    }
- getEmptyTileExit:
-    return empty;
-}
-
-void Puzzle::printFormatError(const char* format_string, ...){
-
-    char error_message[256];
-    va_list args;
-    va_start(args, format_string);
-
-    int buffer_size = vsnprintf(error_message, 256, format_string, args);
-    if (buffer_size < 0) {
-        fprintf(stderr, "An error occured\n");
-    }
-
-    va_end(args);
-
-#ifdef _WIN32
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                             "Error",
-                             error_message,
-                             NULL);
-#else
-    fprintf(stderr, "%s\n", error_message);
-#endif
-}
-
-const char* Puzzle::getPath(const char* filename) {
-    int size = (strlen(this->basePath) + strlen(filename) + 1) * sizeof(char);
-    this->currentFilePath = (char*)realloc(this->currentFilePath, size);
-    memset(this->currentFilePath, 0, size);
-    strcpy(this->currentFilePath, this->basePath);
-    strcat(this->currentFilePath, filename);
-    return this->currentFilePath;
 }
