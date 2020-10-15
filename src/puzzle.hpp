@@ -130,7 +130,16 @@ public:
      */
     void setRenderer(SDL_Renderer* renderer);
 
+    /* Draws black background, lines are drawn with white
+     * calls `renderValue(color)` with white color as an argument
+     * (renders numbers)
+     * So to sum it up, renders background, lines and numbers
+     */
     void render();
+
+    /* Same as `render()`, but renders lines and numbers by
+     * color specified by 1st argument `color`
+     */
     void render(SDL_Color color);
     void click(int x, int y);
     void keydown(SDL_Keycode key);
