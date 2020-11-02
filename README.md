@@ -25,10 +25,10 @@ You can either click on tile to move it to empty space, or use the arrow keys.
 
 |Key             |Description|
 |----------------|-----------|
-|<kbd>Up</kbd>   |Swipe up   |
-|<kbd>Down</kbd> |Swipe down |
-|<kbd>Right</kbd>|Swipe right|
-|<kbd>Left</kbd> |Swipe left |
+|<kbd>🠉</kbd>    |Swipe up   |
+|<kbd>🠋</kbd>    |Swipe down |
+|<kbd>🠊</kbd>    |Swipe right|
+|<kbd>🠈</kbd>    |Swipe left |
 
 The arrow controls might be a little difficult to use from the beginning.
 If that's the case, imagine it as using your finger to move the tiles.
