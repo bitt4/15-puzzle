@@ -20,6 +20,12 @@ make
 
 ## Usage
 
+### Options
+Option                    | Effect
+--------------------------|--------------------------
+`--font PATH`, `-f PATH`  | set font file
+`--help`, `-h`            | display help
+
 ### Controls
 You can either click on tile to move it to empty space, or use the arrow keys.
 
