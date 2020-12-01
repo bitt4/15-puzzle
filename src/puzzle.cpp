@@ -1,14 +1,21 @@
 #include "puzzle.hpp"
 
 Puzzle::Puzzle(const char* font)
-    :fontColor({.r = 255, .g = 255, .b = 255, .a = 255}),
-     winColor({.r = 0, .g = 255, .b = 0}),
-     tiles((int*)calloc(16, sizeof(int))),
+    :tiles((int*)calloc(16, sizeof(int))),
      endGame(false),
      gameOver(false),
      basePath(SDL_GetBasePath()),
      currentFilePath((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
 {
+    this->fontColor.r = 255;
+    this->fontColor.g = 255;
+    this->fontColor.b = 255;
+    this->fontColor.a = 255;
+
+    this->winColor.r = 0;
+    this->winColor.g = 255;
+    this->winColor.b = 0;
+
     /* Select font */
     this->font = TTF_OpenFont(font, 72);
 
