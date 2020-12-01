@@ -6,7 +6,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 LIBS +=-lSDL2main -lSDL2_ttf -lSDL2
-FLAGS +=--std=c++11 -O3 -Wall
+FLAGS +=--std=c++11 -O3 -Wall -pedantic
 
 EXE=15-puzzle
 
@@ -14,4 +14,8 @@ EXE=15-puzzle
 	$(CXX) src/main.cpp src/puzzle.cpp $(LIBS) -o $(EXE) $(FLAGS)
 
 clean:
+ifeq ($(OS),Windows_NT)
+	del $(EXE).exe
+else
 	rm -f $(EXE)
+endif
