@@ -11,13 +11,13 @@ int main(int argc, char *argv[]){
 
     /* Initialize SDL */
     if(SDL_Init(SDL_INIT_VIDEO) != 0){
-        std::cerr << "SDL video did not initialize successfully: " << SDL_GetError() << "\n";
+        fprintf(stderr, "SDL video did not initialize successfully: %s\n",SDL_GetError());
         return EXIT_FAILURE;
     }
 
     /* Initialize TTF */
     if(TTF_Init() == -1){
-        std::cerr << "SDL TTF initialization error: " << TTF_GetError() << "\n";
+        fprintf(stderr, "SDL TTF initialization error: %s\n", TTF_GetError());
         return EXIT_FAILURE;
     }
 
@@ -58,8 +58,8 @@ int main(int argc, char *argv[]){
                                           603, 603,
                                           SDL_WINDOW_SHOWN);
 
-    if(window == NULL){
-        std::cerr << "Window creation failed: " << SDL_GetError() << "\n";
+    if(window == nullptr){
+        fprintf(stderr, "Window creation failed: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
 
@@ -73,8 +73,8 @@ int main(int argc, char *argv[]){
                                                 -1,
                                                 SDL_RENDERER_SOFTWARE);
 
-    if(renderer == NULL){
-        std::cerr << "Renderer creation failed: " << SDL_GetError() << "\n";
+    if(renderer == nullptr){
+        fprintf(stderr, "Renderer creation failed: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
 
