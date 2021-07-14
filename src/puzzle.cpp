@@ -1,24 +1,15 @@
 #include "puzzle.hpp"
 
 Puzzle::Puzzle(const char* font)
-    :m_tiles((int*)calloc(16, sizeof(int))),
-     m_end_game(false),
-     m_game_over(false),
-     m_base_path(SDL_GetBasePath()),
-     m_current_file_path((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
+    :m_tiles { (int*)calloc(16, sizeof(int)) },
+     m_font { TTF_OpenFont(font, 72) },
+     m_font_color { 255, 255, 255, 255 },
+     m_win_color { 0, 255, 0, 0 },
+     m_end_game { false },
+     m_game_over { false },
+     m_base_path { SDL_GetBasePath() },
+     m_current_file_path { (char*)malloc(0) } /* malloc(0) is used so it can be reallocated and resized later */
 {
-    m_font_color.r = 255;
-    m_font_color.g = 255;
-    m_font_color.b = 255;
-    m_font_color.a = 255;
-
-    m_win_color.r = 0;
-    m_win_color.g = 255;
-    m_win_color.b = 0;
-
-    /* Select font */
-    m_font = TTF_OpenFont(font, 72);
-
     /* Catch errors */
     if(!m_font){
         print_format_error("An error occured while loading font '%s': %s", font, TTF_GetError());

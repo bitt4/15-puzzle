@@ -15,9 +15,9 @@ typedef struct {
 class Puzzle {
 private:
     SDL_Renderer *m_renderer;
+    int *m_tiles;
     TTF_Font* m_font;
     SDL_Color m_font_color, m_win_color;
-    int *m_tiles;
     bool m_end_game;
     bool m_game_over;
     const char* m_base_path;
