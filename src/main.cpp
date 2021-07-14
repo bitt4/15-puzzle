@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    std::string font_file = "assets/font/Arial.ttf";
+    std::string font_file = "assets/font/UbuntuMono-R.ttf";
 
     static struct option long_options[] = {
                                            {"font", required_argument, NULL, 'f'},
