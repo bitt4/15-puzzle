@@ -2,26 +2,26 @@
 
 Puzzle::Puzzle(const char* font)
     :m_tiles((int*)calloc(16, sizeof(int))),
-     m_endGame(false),
-     m_gameOver(false),
-     m_basePath(SDL_GetBasePath()),
-     m_currentFilePath((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
+     m_end_game(false),
+     m_game_over(false),
+     m_base_path(SDL_GetBasePath()),
+     m_current_file_path((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
 {
-    m_fontColor.r = 255;
-    m_fontColor.g = 255;
-    m_fontColor.b = 255;
-    m_fontColor.a = 255;
+    m_font_color.r = 255;
+    m_font_color.g = 255;
+    m_font_color.b = 255;
+    m_font_color.a = 255;
 
-    m_winColor.r = 0;
-    m_winColor.g = 255;
-    m_winColor.b = 0;
+    m_win_color.r = 0;
+    m_win_color.g = 255;
+    m_win_color.b = 0;
 
     /* Select font */
     m_font = TTF_OpenFont(font, 72);
 
     /* Catch errors */
     if(!m_font){
-        printFormatError("An error occured while loading font '%s': %s", font, TTF_GetError());
+        print_format_error("An error occured while loading font '%s': %s", font, TTF_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -36,16 +36,16 @@ Puzzle::Puzzle(const char* font)
 
 Puzzle::~Puzzle(){
     free(m_tiles);
-    free(m_currentFilePath);
+    free(m_current_file_path);
 }
 
-void Puzzle::swapTiles(int x, int y){
+void Puzzle::swap_tiles(int x, int y){
     /* return immediately if user clicks on empty tile */
     if(m_tiles[y * 4 +x] == 0)
         return;
 
     /* Search for empty tile */
-    Point empty = getEmptyTile();
+    Point empty = get_empty_tile();
     int emptyTilePosX = empty.x,
         emptyTilePosY = empty.y;
 
@@ -57,11 +57,11 @@ void Puzzle::swapTiles(int x, int y){
     }
 }
 
-void Puzzle::renderValue(){
-    renderValue(m_fontColor);
+void Puzzle::render_value(){
+    render_value(m_font_color);
 }
 
-void Puzzle::renderValue(SDL_Color color){
+void Puzzle::render_value(SDL_Color color){
     SDL_Surface* cellText = 0;
     SDL_Texture* cellTexture = 0;
 
@@ -96,7 +96,7 @@ void Puzzle::renderValue(SDL_Color color){
     SDL_DestroyTexture(cellTexture);
 }
 
-bool Puzzle::isGameOver(){
+bool Puzzle::is_game_over(){
     for(int i = 0; i < 16; i++){
         if(m_tiles[i] != (i+1)%16)
             return false;
@@ -105,7 +105,7 @@ bool Puzzle::isGameOver(){
     return true;
 }
 
-bool Puzzle::isSolvable(){
+bool Puzzle::is_solvable(){
     /* This site has very good explanation */
     /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
 
@@ -121,7 +121,7 @@ bool Puzzle::isSolvable(){
 
     bool evenBlankPositionFromBottom;
 
-    Point empty = getEmptyTile();
+    Point empty = get_empty_tile();
 
     evenBlankPositionFromBottom = (empty.y % 2 == 0);
 
@@ -144,16 +144,16 @@ void Puzzle::shuffle(){
             lastPos = currentPos;
         }
     }
-    while(!isSolvable());
+    while(!is_solvable());
 }
 
 void Puzzle::restart(){
-    m_gameOver = false;
+    m_game_over = false;
     shuffle();
     render();
 }
 
-Point Puzzle::getEmptyTile(){
+Point Puzzle::get_empty_tile(){
     Point empty;
 
     for(int y = 0; y < 4; y++){
@@ -169,7 +169,7 @@ Point Puzzle::getEmptyTile(){
     return empty;
 }
 
-void Puzzle::printFormatError(const char* format_string, ...){
+void Puzzle::print_format_error(const char* format_string, ...){
 
     char error_message[256];
     va_list args;
@@ -192,16 +192,16 @@ void Puzzle::printFormatError(const char* format_string, ...){
 #endif
 }
 
-const char* Puzzle::getPath(const char* filename) {
-    int size = (strlen(m_basePath) + strlen(filename) + 1) * sizeof(char);
-    m_currentFilePath = (char*)realloc(m_currentFilePath, size);
-    memset(m_currentFilePath, 0, size);
-    strcpy(m_currentFilePath, m_basePath);
-    strcat(m_currentFilePath, filename);
-    return m_currentFilePath;
+const char* Puzzle::get_path(const char* filename) {
+    int size = (strlen(m_base_path) + strlen(filename) + 1) * sizeof(char);
+    m_current_file_path = (char*)realloc(m_current_file_path, size);
+    memset(m_current_file_path, 0, size);
+    strcpy(m_current_file_path, m_base_path);
+    strcat(m_current_file_path, filename);
+    return m_current_file_path;
 }
 
-void Puzzle::setRenderer(SDL_Renderer* renderer){
+void Puzzle::set_renderer(SDL_Renderer* renderer){
     m_renderer = renderer;
 }
 
@@ -231,59 +231,59 @@ void Puzzle::render(SDL_Color color){
                            150 * i + i);
     }
 
-    renderValue(color);
+    render_value(color);
 }
 
 void Puzzle::click(int x, int y){
-    if(m_gameOver){
+    if(m_game_over){
         restart();
     }
     else {
-        swapTiles(x, y);
+        swap_tiles(x, y);
         render();
-        if(isGameOver()){
-            render(m_winColor);
-            m_gameOver = true;
+        if(is_game_over()){
+            render(m_win_color);
+            m_game_over = true;
         }
     }
     SDL_RenderPresent(m_renderer);
 }
 
 void Puzzle::keydown(SDL_Keycode key){
-    if(m_gameOver){
+    if(m_game_over){
         restart();
         SDL_RenderPresent(m_renderer);
     }
     else {
         switch(key){
         case SDLK_DOWN: {
-            Point empty = getEmptyTile();
+            Point empty = get_empty_tile();
             if(empty.y - 1 >= 0){
-                swapTiles(empty.x, empty.y-1);
+                swap_tiles(empty.x, empty.y-1);
                 goto exit;
             }
             break;
         }
         case SDLK_UP: {
-            Point empty = getEmptyTile();
+            Point empty = get_empty_tile();
             if(empty.y + 1 <= 3){
-                swapTiles(empty.x, empty.y+1);
+                swap_tiles(empty.x, empty.y+1);
                 goto exit;
             }
             break;
         }
         case SDLK_LEFT: {
-            Point empty = getEmptyTile();
+            Point empty = get_empty_tile();
             if(empty.x + 1 <= 3){
-                swapTiles(empty.x+1, empty.y);
+                swap_tiles(empty.x+1, empty.y);
                 goto exit;
             }
             break;
         }
         case SDLK_RIGHT: {
-            Point empty = getEmptyTile();
+            Point empty = get_empty_tile();
             if(empty.x - 1 >= 0){
-                swapTiles(empty.x-1, empty.y);
+                swap_tiles(empty.x-1, empty.y);
                 goto exit;
             }
             break;
@@ -292,9 +292,9 @@ void Puzzle::keydown(SDL_Keycode key){
         }
 
     exit:
-        if(isGameOver()){
-            render(m_winColor);
-            m_gameOver = true;
+        if(is_game_over()){
+            render(m_win_color);
+            m_game_over = true;
         }
         else {
             render();
@@ -303,10 +303,10 @@ void Puzzle::keydown(SDL_Keycode key){
     }
 }
 
-bool Puzzle::getEndGame(){
-    return m_endGame;
+bool Puzzle::get_end_game(){
+    return m_end_game;
 }
 
 void Puzzle::quit(){
-    m_endGame = true;
+    m_end_game = true;
 }

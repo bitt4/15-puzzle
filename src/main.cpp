@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
     }
 
     /* Set window icon */
-    SDL_Surface *icon = SDL_LoadBMP(puzzle.getPath("assets/icon.bmp"));
+    SDL_Surface *icon = SDL_LoadBMP(puzzle.get_path("assets/icon.bmp"));
     SDL_SetWindowIcon(window, icon);
     SDL_FreeSurface(icon);
 
@@ -78,13 +78,13 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    puzzle.setRenderer(renderer);
+    puzzle.set_renderer(renderer);
     puzzle.render();
     SDL_RenderPresent(renderer);
 
     SDL_Event e;
 
-    while(!puzzle.getEndGame()){
+    while(!puzzle.get_end_game()){
         while(SDL_PollEvent(&e)){
             switch(e.type){
                 case SDL_QUIT:
