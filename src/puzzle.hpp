@@ -16,36 +16,36 @@ class Puzzle {
 private:
     SDL_Renderer *m_renderer;
     TTF_Font* m_font;
-    SDL_Color m_fontColor, m_winColor;
+    SDL_Color m_font_color, m_win_color;
     int *m_tiles;
-    bool m_endGame;
-    bool m_gameOver;
-    const char* m_basePath;
-    char* m_currentFilePath;
+    bool m_end_game;
+    bool m_game_over;
+    const char* m_base_path;
+    char* m_current_file_path;
 
-    void swapTiles(int target_x, int target_y);
-    void renderValue();
-    void renderValue(SDL_Color color);
-    bool isGameOver();
+    void swap_tiles(int target_x, int target_y);
+    void render_value();
+    void render_value(SDL_Color color);
+    bool is_game_over();
 
     /*
      * source: www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
      */
-    bool isSolvable();
+    bool is_solvable();
     void shuffle();
     void restart();
-    Point getEmptyTile();
-    void printFormatError(const char* format_string, ...);
+    Point get_empty_tile();
+    void print_format_error(const char* format_string, ...);
 
 public:
     Puzzle(const char* font);
     ~Puzzle();
-    const char* getPath(const char* filename);
-    void setRenderer(SDL_Renderer* renderer);
+    const char* get_path(const char* filename);
+    void set_renderer(SDL_Renderer* renderer);
     void render();
     void render(SDL_Color color);
     void click(int x, int y);
     void keydown(SDL_Keycode key);
-    bool getEndGame();
+    bool get_end_game();
     void quit();
 };
