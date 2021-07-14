@@ -1,33 +1,33 @@
 #include "puzzle.hpp"
 
 Puzzle::Puzzle(const char* font)
-    :tiles((int*)calloc(16, sizeof(int))),
-     endGame(false),
-     gameOver(false),
-     basePath(SDL_GetBasePath()),
-     currentFilePath((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
+    :m_tiles((int*)calloc(16, sizeof(int))),
+     m_endGame(false),
+     m_gameOver(false),
+     m_basePath(SDL_GetBasePath()),
+     m_currentFilePath((char*)malloc(0)) /* malloc(0) is used so it can be reallocated and resized later */
 {
-    this->fontColor.r = 255;
-    this->fontColor.g = 255;
-    this->fontColor.b = 255;
-    this->fontColor.a = 255;
+    this->m_fontColor.r = 255;
+    this->m_fontColor.g = 255;
+    this->m_fontColor.b = 255;
+    this->m_fontColor.a = 255;
 
-    this->winColor.r = 0;
-    this->winColor.g = 255;
-    this->winColor.b = 0;
+    this->m_winColor.r = 0;
+    this->m_winColor.g = 255;
+    this->m_winColor.b = 0;
 
     /* Select font */
-    this->font = TTF_OpenFont(font, 72);
+    this->m_font = TTF_OpenFont(font, 72);
 
     /* Catch errors */
-    if(!this->font){
+    if(!this->m_font){
         printFormatError("An error occured while loading font '%s': %s", font, TTF_GetError());
         exit(EXIT_FAILURE);
     }
 
     /* Initialize tiles */
     for(int i = 0; i < 16; i++){
-        this->tiles[i] = i;
+        this->m_tiles[i] = i;
     }
 
     /* Shuffle tiles (looks random)*/
@@ -35,13 +35,13 @@ Puzzle::Puzzle(const char* font)
 }
 
 Puzzle::~Puzzle(){
-    free(this->tiles);
-    free(this->currentFilePath);
+    free(this->m_tiles);
+    free(this->m_currentFilePath);
 }
 
 void Puzzle::swapTiles(int x, int y){
     /* return immediately if user clicks on empty tile */
-    if(this->tiles[y * 4 +x] == 0)
+    if(this->m_tiles[y * 4 +x] == 0)
         return;
 
     /* Search for empty tile */
@@ -51,14 +51,14 @@ void Puzzle::swapTiles(int x, int y){
 
     /* Check if target tile is next to empty tile */
     if(abs(emptyTilePosX - x) + abs(emptyTilePosY - y) == 1){
-        int temp = this->tiles[y * 4 + x];
-        this->tiles[y * 4 + x] = 0;
-        this->tiles[emptyTilePosY * 4 + emptyTilePosX] = temp;
+        int temp = this->m_tiles[y * 4 + x];
+        this->m_tiles[y * 4 + x] = 0;
+        this->m_tiles[emptyTilePosY * 4 + emptyTilePosX] = temp;
     }
 }
 
 void Puzzle::renderValue(){
-    renderValue(this->fontColor);
+    renderValue(this->m_fontColor);
 }
 
 void Puzzle::renderValue(SDL_Color color){
@@ -67,19 +67,19 @@ void Puzzle::renderValue(SDL_Color color){
 
     for(int y = 0; y < 4; y++){
         for(int x = 0; x < 4; x++){
-            if(this->tiles[y * 4 + x]){
+            if(this->m_tiles[y * 4 + x]){
                 int textWidth, textHeight;
 
-                TTF_SizeText(this->font,
-                             std::to_string(this->tiles[y * 4 + x]).c_str(),
+                TTF_SizeText(this->m_font,
+                             std::to_string(this->m_tiles[y * 4 + x]).c_str(),
                              &textWidth,
                              &textHeight);
 
-                cellText = TTF_RenderText_Blended(this->font,
-                                                  std::to_string(this->tiles[y * 4 + x]).c_str(),
+                cellText = TTF_RenderText_Blended(this->m_font,
+                                                  std::to_string(this->m_tiles[y * 4 + x]).c_str(),
                                                   color);
 
-                cellTexture = SDL_CreateTextureFromSurface(this->renderer, cellText);
+                cellTexture = SDL_CreateTextureFromSurface(this->m_renderer, cellText);
 
                 SDL_Rect cellRectangle;
                 cellRectangle.x = x * 150 + x + (150-textWidth)/2;
@@ -87,7 +87,7 @@ void Puzzle::renderValue(SDL_Color color){
                 cellRectangle.w = textWidth;
                 cellRectangle.h = textHeight;
 
-                SDL_RenderCopy(this->renderer, cellTexture, NULL, &cellRectangle);
+                SDL_RenderCopy(this->m_renderer, cellTexture, NULL, &cellRectangle);
             }
         }
     }
@@ -98,7 +98,7 @@ void Puzzle::renderValue(SDL_Color color){
 
 bool Puzzle::isGameOver(){
     for(int i = 0; i < 16; i++){
-        if(this->tiles[i] != (i+1)%16)
+        if(this->m_tiles[i] != (i+1)%16)
             return false;
     }
 
@@ -111,10 +111,10 @@ bool Puzzle::isSolvable(){
 
     int inversions = 0;
     for(int i = 0; i < 15; i++){
-        int currentValue = this->tiles[i];
+        int currentValue = this->m_tiles[i];
         for(int j = i + 1; j < 16; j++){
             /* Skip blank tile */
-            if(currentValue && tiles[j] && currentValue > this->tiles[j])
+            if(currentValue && m_tiles[j] && currentValue > this->m_tiles[j])
                 inversions++;
         }
     }
@@ -138,9 +138,9 @@ void Puzzle::shuffle(){
     do {
         for(int i = 0; i < 100; i++){
             currentPos = rand()%16;
-            int tmp = this->tiles[currentPos];
-            this->tiles[currentPos] = this->tiles[lastPos];
-            this->tiles[lastPos] = tmp;
+            int tmp = this->m_tiles[currentPos];
+            this->m_tiles[currentPos] = this->m_tiles[lastPos];
+            this->m_tiles[lastPos] = tmp;
             lastPos = currentPos;
         }
     }
@@ -148,7 +148,7 @@ void Puzzle::shuffle(){
 }
 
 void Puzzle::restart(){
-    this->gameOver = false;
+    this->m_gameOver = false;
     shuffle();
     render();
 }
@@ -158,7 +158,7 @@ Point Puzzle::getEmptyTile(){
 
     for(int y = 0; y < 4; y++){
         for(int x = 0; x < 4; x++){
-            if(!this->tiles[y * 4 + x]){
+            if(!this->m_tiles[y * 4 + x]){
                 empty.x = x;
                 empty.y = y;
                 goto getEmptyTileExit;
@@ -193,16 +193,16 @@ void Puzzle::printFormatError(const char* format_string, ...){
 }
 
 const char* Puzzle::getPath(const char* filename) {
-    int size = (strlen(this->basePath) + strlen(filename) + 1) * sizeof(char);
-    this->currentFilePath = (char*)realloc(this->currentFilePath, size);
-    memset(this->currentFilePath, 0, size);
-    strcpy(this->currentFilePath, this->basePath);
-    strcat(this->currentFilePath, filename);
-    return this->currentFilePath;
+    int size = (strlen(this->m_basePath) + strlen(filename) + 1) * sizeof(char);
+    this->m_currentFilePath = (char*)realloc(this->m_currentFilePath, size);
+    memset(this->m_currentFilePath, 0, size);
+    strcpy(this->m_currentFilePath, this->m_basePath);
+    strcat(this->m_currentFilePath, filename);
+    return this->m_currentFilePath;
 }
 
 void Puzzle::setRenderer(SDL_Renderer* renderer){
-    this->renderer = renderer;
+    this->m_renderer = renderer;
 }
 
 void Puzzle::render(){
@@ -212,19 +212,19 @@ void Puzzle::render(){
 
 void Puzzle::render(SDL_Color color){
     /* Render black empty board */
-    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(this->m_renderer, 0, 0, 0, 0);
+    SDL_RenderClear(m_renderer);
 
     /* Render lines */
-    SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
+    SDL_SetRenderDrawColor(this->m_renderer, color.r, color.g, color.b, color.a);
     for(int i = 1; i < 4; i++){
-        SDL_RenderDrawLine(this->renderer,
+        SDL_RenderDrawLine(this->m_renderer,
                            150 * i + i,
                            0,
                            150 * i + i,
                            150 * 4 + 3);
 
-        SDL_RenderDrawLine(this->renderer,
+        SDL_RenderDrawLine(this->m_renderer,
                            0,
                            150 * i + i,
                            150 * 4 + 3,
@@ -235,24 +235,24 @@ void Puzzle::render(SDL_Color color){
 }
 
 void Puzzle::click(int x, int y){
-    if(this->gameOver){
+    if(this->m_gameOver){
         restart();
     }
     else {
         swapTiles(x, y);
         render();
         if(isGameOver()){
-            render(this->winColor);
-            this->gameOver = true;
+            render(this->m_winColor);
+            this->m_gameOver = true;
         }
     }
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(m_renderer);
 }
 
 void Puzzle::keydown(SDL_Keycode key){
-    if(this->gameOver){
+    if(this->m_gameOver){
         restart();
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(m_renderer);
     }
     else {
         switch(key){
@@ -293,20 +293,20 @@ void Puzzle::keydown(SDL_Keycode key){
 
     exit:
         if(isGameOver()){
-            render(this->winColor);
-            this->gameOver = true;
+            render(this->m_winColor);
+            this->m_gameOver = true;
         }
         else {
             render();
         }
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(m_renderer);
     }
 }
 
 bool Puzzle::getEndGame(){
-    return this->endGame;
+    return this->m_endGame;
 }
 
 void Puzzle::quit(){
-    this->endGame = true;
+    this->m_endGame = true;
 }

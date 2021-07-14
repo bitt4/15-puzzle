@@ -14,14 +14,15 @@ typedef struct {
 
 class Puzzle {
 private:
-    SDL_Renderer *renderer;
-    TTF_Font* font;
-    SDL_Color fontColor, winColor;
-    int *tiles;
-    bool endGame;
-    bool gameOver;
-    const char* basePath;
-    char* currentFilePath;
+    SDL_Renderer *m_renderer;
+    TTF_Font* m_font;
+    SDL_Color m_fontColor, m_winColor;
+    int *m_tiles;
+    bool m_endGame;
+    bool m_gameOver;
+    const char* m_basePath;
+    char* m_currentFilePath;
+
     void swapTiles(int target_x, int target_y);
     void renderValue();
     void renderValue(SDL_Color color);
