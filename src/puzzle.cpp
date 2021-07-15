@@ -15,8 +15,9 @@ Puzzle::Puzzle(const std::string &font)
     }
 
     /* Initialize tiles */
-    m_tiles.resize(16);
-    for(int i = 0; i < 16; i++){
+    const int number_of_tiles = m_size * m_size;
+    m_tiles.resize(number_of_tiles);
+    for(int i = 0; i < number_of_tiles; i++){
         m_tiles[i] = i;
     }
 
@@ -31,8 +32,10 @@ Puzzle::~Puzzle(){
 }
 
 void Puzzle::swap_tiles(const int x, const int y){
+    const int current_position = y * m_size + x;
+
     /* return immediately if user clicks on empty tile */
-    if(m_tiles[y * 4 +x] == 0)
+    if(m_tiles[current_position] == 0)
         return;
 
     /* Search for empty tile */
@@ -42,9 +45,9 @@ void Puzzle::swap_tiles(const int x, const int y){
 
     /* Check if target tile is next to empty tile */
     if(abs(emptyTilePosX - x) + abs(emptyTilePosY - y) == 1){
-        int temp = m_tiles[y * 4 + x];
-        m_tiles[y * 4 + x] = 0;
-        m_tiles[emptyTilePosY * 4 + emptyTilePosX] = temp;
+        int temp = m_tiles[current_position];
+        m_tiles[current_position] = 0;
+        m_tiles[emptyTilePosY * m_size + emptyTilePosX] = temp;
     }
 }
 
@@ -56,18 +59,19 @@ void Puzzle::render_value(const SDL_Color &color) const {
     SDL_Surface* cellText = 0;
     SDL_Texture* cellTexture = 0;
 
-    for(int y = 0; y < 4; y++){
-        for(int x = 0; x < 4; x++){
-            if(m_tiles[y * 4 + x]){
+    for(int y = 0; y < m_size; y++){
+        for(int x = 0; x < m_size; x++){
+            const int current_cell_position = y * m_size + x;
+            if(m_tiles[current_cell_position]){
                 int textWidth, textHeight;
 
                 TTF_SizeText(m_font,
-                             std::to_string(m_tiles[y * 4 + x]).c_str(),
+                             std::to_string(m_tiles[current_cell_position]).c_str(),
                              &textWidth,
                              &textHeight);
 
                 cellText = TTF_RenderText_Blended(m_font,
-                                                  std::to_string(m_tiles[y * 4 + x]).c_str(),
+                                                  std::to_string(m_tiles[current_cell_position]).c_str(),
                                                   color);
 
                 cellTexture = SDL_CreateTextureFromSurface(m_renderer, cellText);
@@ -88,8 +92,9 @@ void Puzzle::render_value(const SDL_Color &color) const {
 }
 
 bool Puzzle::is_game_over() const {
-    for(int i = 0; i < 16; i++){
-        if(m_tiles[i] != (i+1)%16)
+    const int number_of_tiles = m_size * m_size;
+    for(int i = 0; i < number_of_tiles; i++){
+        if(m_tiles[i] != (i + 1) % number_of_tiles)
             return false;
     }
 
@@ -100,10 +105,11 @@ bool Puzzle::is_solvable() const {
     /* This site has very good explanation */
     /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
 
+    const int number_of_tiles = m_size * m_size;
     int inversions = 0;
-    for(int i = 0; i < 15; i++){
+    for(int i = 0; i < number_of_tiles - 1; i++){
         int currentValue = m_tiles[i];
-        for(int j = i + 1; j < 16; j++){
+        for(int j = i + 1; j < number_of_tiles; j++){
             /* Skip blank tile */
             if(currentValue && m_tiles[j] && currentValue > m_tiles[j])
                 inversions++;
@@ -125,10 +131,11 @@ bool Puzzle::is_solvable() const {
 void Puzzle::shuffle(){
     int currentPos, lastPos = 0;
     srand(time(0));
+    const int number_of_tiles = m_size * m_size;
 
     do {
         for(int i = 0; i < 100; i++){
-            currentPos = rand()%16;
+            currentPos = rand() % number_of_tiles;
             int tmp = m_tiles[currentPos];
             m_tiles[currentPos] = m_tiles[lastPos];
             m_tiles[lastPos] = tmp;
@@ -147,9 +154,9 @@ void Puzzle::restart(){
 Point Puzzle::get_empty_tile() const {
     Point empty;
 
-    for(int y = 0; y < 4; y++){
-        for(int x = 0; x < 4; x++){
-            if(!m_tiles[y * 4 + x]){
+    for(int y = 0; y < m_size; y++){
+        for(int x = 0; x < m_size; x++){
+            if(!m_tiles[y * m_size + x]){
                 empty.x = x;
                 empty.y = y;
                 goto getEmptyTileExit;
@@ -203,17 +210,17 @@ void Puzzle::render(const SDL_Color &color) const {
 
     /* Render lines */
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
-    for(int i = 1; i < 4; i++){
+    for(int i = 1; i < m_size; i++){
         SDL_RenderDrawLine(m_renderer,
                            150 * i + i,
                            0,
                            150 * i + i,
-                           150 * 4 + 3);
+                           150 * m_size + m_size - 1);
 
         SDL_RenderDrawLine(m_renderer,
                            0,
                            150 * i + i,
-                           150 * 4 + 3,
+                           150 * m_size + m_size - 1,
                            150 * i + i);
     }
 
@@ -252,7 +259,7 @@ void Puzzle::keydown(const SDL_Keycode key){
         }
         case SDLK_UP: {
             Point empty = get_empty_tile();
-            if(empty.y + 1 <= 3){
+            if(empty.y + 1 < m_size){
                 swap_tiles(empty.x, empty.y+1);
                 goto exit;
             }
@@ -260,7 +267,7 @@ void Puzzle::keydown(const SDL_Keycode key){
         }
         case SDLK_LEFT: {
             Point empty = get_empty_tile();
-            if(empty.x + 1 <= 3){
+            if(empty.x + 1 < m_size){
                 swap_tiles(empty.x+1, empty.y);
                 goto exit;
             }
