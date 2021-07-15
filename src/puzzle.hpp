@@ -19,9 +19,10 @@ private:
     SDL_Renderer *m_renderer;
     std::vector<int> m_tiles;
     TTF_Font* m_font;
-    const SDL_Color m_font_color, m_win_color;
-    bool m_end_game;
-    bool m_game_over;
+    const SDL_Color m_font_color { 255, 255, 255, 255 };
+    const SDL_Color m_win_color { 0, 255, 0, 0 };
+    bool m_end_game { false };
+    bool m_game_over { false };
     const std::string m_base_path;
 
     void swap_tiles(const int target_x, const int target_y);

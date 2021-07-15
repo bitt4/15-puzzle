@@ -2,10 +2,6 @@
 
 Puzzle::Puzzle(const std::string &font)
     :m_font { TTF_OpenFont(font.c_str(), 72) },
-     m_font_color { 255, 255, 255, 255 },
-     m_win_color { 0, 255, 0, 0 },
-     m_end_game { false },
-     m_game_over { false },
      m_base_path { SDL_GetBasePath() }
 {
     /* Catch errors */
