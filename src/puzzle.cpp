@@ -1,22 +1,21 @@
 #include "puzzle.hpp"
 
-Puzzle::Puzzle(const char* font)
-    :m_tiles { (int*)calloc(16, sizeof(int)) },
-     m_font { TTF_OpenFont(font, 72) },
+Puzzle::Puzzle(std::string font)
+    :m_font { TTF_OpenFont(font.c_str(), 72) },
      m_font_color { 255, 255, 255, 255 },
      m_win_color { 0, 255, 0, 0 },
      m_end_game { false },
      m_game_over { false },
-     m_base_path { SDL_GetBasePath() },
-     m_current_file_path { (char*)malloc(0) } /* malloc(0) is used so it can be reallocated and resized later */
+     m_base_path { SDL_GetBasePath() }
 {
     /* Catch errors */
     if(!m_font){
-        print_format_error("An error occured while loading font '%s': %s", font, TTF_GetError());
+        print_format_error("An error occured while loading font '%s': %s", font.c_str(), TTF_GetError());
         exit(EXIT_FAILURE);
     }
 
     /* Initialize tiles */
+    m_tiles.resize(16);
     for(int i = 0; i < 16; i++){
         m_tiles[i] = i;
     }
@@ -26,8 +25,6 @@ Puzzle::Puzzle(const char* font)
 }
 
 Puzzle::~Puzzle(){
-    free(m_tiles);
-    free(m_current_file_path);
     // TTF_CloseFont(m_font);
     // I got segfault when calling TTF_CloseFont(m_font),
     // but when I removed TTF_Quit() in main.cpp, the segfault disappeared
@@ -186,13 +183,8 @@ void Puzzle::print_format_error(const char* format_string, ...){
 #endif
 }
 
-const char* Puzzle::get_path(const char* filename) {
-    int size = (strlen(m_base_path) + strlen(filename) + 1) * sizeof(char);
-    m_current_file_path = (char*)realloc(m_current_file_path, size);
-    memset(m_current_file_path, 0, size);
-    strcpy(m_current_file_path, m_base_path);
-    strcat(m_current_file_path, filename);
-    return m_current_file_path;
+std::string Puzzle::get_path(std::string filename) {
+    return m_base_path + filename;
 }
 
 void Puzzle::set_renderer(SDL_Renderer* renderer){
