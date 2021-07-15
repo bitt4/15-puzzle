@@ -30,10 +30,6 @@ private:
     void render_value() const;
     void render_value(const SDL_Color &color) const;
     bool is_game_over() const;
-
-    /*
-     * source: www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
-     */
     bool is_solvable() const;
     void shuffle();
     void restart();
