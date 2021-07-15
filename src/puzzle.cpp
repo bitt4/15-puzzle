@@ -13,7 +13,7 @@ Puzzle::Puzzle(const std::string &font)
     /* Initialize tiles */
     const int number_of_tiles = m_size * m_size;
     m_tiles.resize(number_of_tiles);
-    for(int i = 0; i < number_of_tiles; i++){
+    for(int i = 0; i < number_of_tiles; ++i){
         m_tiles[i] = i;
     }
 
@@ -55,8 +55,8 @@ void Puzzle::render_value(const SDL_Color &color) const {
     SDL_Surface* cellText = 0;
     SDL_Texture* cellTexture = 0;
 
-    for(int y = 0; y < m_size; y++){
-        for(int x = 0; x < m_size; x++){
+    for(int y = 0; y < m_size; ++y){
+        for(int x = 0; x < m_size; ++x){
             const int current_cell_position = y * m_size + x;
             if(m_tiles[current_cell_position]){
                 int textWidth, textHeight;
@@ -89,7 +89,7 @@ void Puzzle::render_value(const SDL_Color &color) const {
 
 bool Puzzle::is_game_over() const {
     const int number_of_tiles = m_size * m_size;
-    for(int i = 0; i < number_of_tiles; i++){
+    for(int i = 0; i < number_of_tiles; ++i){
         if(m_tiles[i] != (i + 1) % number_of_tiles)
             return false;
     }
@@ -103,9 +103,9 @@ bool Puzzle::is_solvable() const {
 
     const int number_of_tiles = m_size * m_size;
     int inversions = 0;
-    for(int i = 0; i < number_of_tiles - 1; i++){
+    for(int i = 0; i < number_of_tiles - 1; ++i){
         int currentValue = m_tiles[i];
-        for(int j = i + 1; j < number_of_tiles; j++){
+        for(int j = i + 1; j < number_of_tiles; ++j){
             /* Skip blank tile */
             if(currentValue && m_tiles[j] && currentValue > m_tiles[j])
                 inversions++;
@@ -130,7 +130,7 @@ void Puzzle::shuffle(){
     const int number_of_tiles = m_size * m_size;
 
     do {
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < 100; ++i){
             currentPos = rand() % number_of_tiles;
             int tmp = m_tiles[currentPos];
             m_tiles[currentPos] = m_tiles[lastPos];
@@ -150,8 +150,8 @@ void Puzzle::restart(){
 Point Puzzle::get_empty_tile() const {
     Point empty;
 
-    for(int y = 0; y < m_size; y++){
-        for(int x = 0; x < m_size; x++){
+    for(int y = 0; y < m_size; ++y){
+        for(int x = 0; x < m_size; ++x){
             if(!m_tiles[y * m_size + x]){
                 empty.x = x;
                 empty.y = y;
@@ -206,7 +206,7 @@ void Puzzle::render(const SDL_Color &color) const {
 
     /* Render lines */
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
-    for(int i = 1; i < m_size; i++){
+    for(int i = 1; i < m_size; ++i){
         SDL_RenderDrawLine(m_renderer,
                            150 * i + i,
                            0,
