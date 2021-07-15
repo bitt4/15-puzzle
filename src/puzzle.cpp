@@ -1,6 +1,6 @@
 #include "puzzle.hpp"
 
-Puzzle::Puzzle(std::string font)
+Puzzle::Puzzle(const std::string &font)
     :m_font { TTF_OpenFont(font.c_str(), 72) },
      m_font_color { 255, 255, 255, 255 },
      m_win_color { 0, 255, 0, 0 },
@@ -30,7 +30,7 @@ Puzzle::~Puzzle(){
     // but when I removed TTF_Quit() in main.cpp, the segfault disappeared
 }
 
-void Puzzle::swap_tiles(int x, int y){
+void Puzzle::swap_tiles(const int x, const int y){
     /* return immediately if user clicks on empty tile */
     if(m_tiles[y * 4 +x] == 0)
         return;
@@ -48,11 +48,11 @@ void Puzzle::swap_tiles(int x, int y){
     }
 }
 
-void Puzzle::render_value(){
+void Puzzle::render_value() const {
     render_value(m_font_color);
 }
 
-void Puzzle::render_value(SDL_Color color){
+void Puzzle::render_value(const SDL_Color &color) const {
     SDL_Surface* cellText = 0;
     SDL_Texture* cellTexture = 0;
 
@@ -87,7 +87,7 @@ void Puzzle::render_value(SDL_Color color){
     SDL_DestroyTexture(cellTexture);
 }
 
-bool Puzzle::is_game_over(){
+bool Puzzle::is_game_over() const {
     for(int i = 0; i < 16; i++){
         if(m_tiles[i] != (i+1)%16)
             return false;
@@ -96,7 +96,7 @@ bool Puzzle::is_game_over(){
     return true;
 }
 
-bool Puzzle::is_solvable(){
+bool Puzzle::is_solvable() const {
     /* This site has very good explanation */
     /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
 
@@ -144,7 +144,7 @@ void Puzzle::restart(){
     render();
 }
 
-Point Puzzle::get_empty_tile(){
+Point Puzzle::get_empty_tile() const {
     Point empty;
 
     for(int y = 0; y < 4; y++){
@@ -183,7 +183,7 @@ void Puzzle::print_format_error(const char* format_string, ...){
 #endif
 }
 
-std::string Puzzle::get_path(std::string filename) {
+std::string Puzzle::get_path(const std::string &filename) const {
     return m_base_path + filename;
 }
 
@@ -191,12 +191,12 @@ void Puzzle::set_renderer(SDL_Renderer* renderer){
     m_renderer = renderer;
 }
 
-void Puzzle::render(){
+void Puzzle::render() const {
     SDL_Color white = {255, 255, 255, 255};
     render(white);
 }
 
-void Puzzle::render(SDL_Color color){
+void Puzzle::render(const SDL_Color &color) const {
     /* Render black empty board */
     SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
     SDL_RenderClear(m_renderer);
@@ -220,7 +220,7 @@ void Puzzle::render(SDL_Color color){
     render_value(color);
 }
 
-void Puzzle::click(int x, int y){
+void Puzzle::click(const int x, const int y){
     if(m_game_over){
         restart();
     }
@@ -235,7 +235,7 @@ void Puzzle::click(int x, int y){
     SDL_RenderPresent(m_renderer);
 }
 
-void Puzzle::keydown(SDL_Keycode key){
+void Puzzle::keydown(const SDL_Keycode key){
     if(m_game_over){
         restart();
         SDL_RenderPresent(m_renderer);
@@ -289,7 +289,7 @@ void Puzzle::keydown(SDL_Keycode key){
     }
 }
 
-bool Puzzle::get_end_game(){
+bool Puzzle::get_end_game() const {
     return m_end_game;
 }
 
