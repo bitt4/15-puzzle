@@ -73,8 +73,8 @@ void Puzzle::render_value(const SDL_Color &color) const {
                 cellTexture = SDL_CreateTextureFromSurface(m_renderer, cellText);
 
                 SDL_Rect cellRectangle;
-                cellRectangle.x = x * 150 + x + (150-textWidth)/2;
-                cellRectangle.y = y * 150 + y + (150-textHeight)/2;
+                cellRectangle.x = x * m_tile_width + x + (m_tile_width - textWidth) / 2;
+                cellRectangle.y = y * m_tile_width + y + (m_tile_width - textHeight) / 2;
                 cellRectangle.w = textWidth;
                 cellRectangle.h = textHeight;
 
@@ -208,16 +208,16 @@ void Puzzle::render(const SDL_Color &color) const {
     SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
     for(int i = 1; i < m_size; ++i){
         SDL_RenderDrawLine(m_renderer,
-                           150 * i + i,
+                           m_tile_width * i + i,
                            0,
-                           150 * i + i,
-                           150 * m_size + m_size - 1);
+                           m_tile_width * i + i,
+                           m_tile_width * m_size + m_size - 1);
 
         SDL_RenderDrawLine(m_renderer,
                            0,
-                           150 * i + i,
-                           150 * m_size + m_size - 1,
-                           150 * i + i);
+                           m_tile_width * i + i,
+                           m_tile_width * m_size + m_size - 1,
+                           m_tile_width * i + i);
     }
 
     render_value(color);
