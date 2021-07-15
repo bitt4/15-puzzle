@@ -6,6 +6,7 @@
 #include <random>
 #include <ctime>
 #include <cstdarg>
+#include <vector>
 
 typedef struct {
     int x;
@@ -15,13 +16,12 @@ typedef struct {
 class Puzzle {
 private:
     SDL_Renderer *m_renderer;
-    int *m_tiles;
+    std::vector<int> m_tiles;
     TTF_Font* m_font;
     SDL_Color m_font_color, m_win_color;
     bool m_end_game;
     bool m_game_over;
-    const char* m_base_path;
-    char* m_current_file_path;
+    std::string m_base_path;
 
     void swap_tiles(int target_x, int target_y);
     void render_value();
@@ -38,9 +38,9 @@ private:
     void print_format_error(const char* format_string, ...);
 
 public:
-    Puzzle(const char* font);
+    Puzzle(std::string font);
     ~Puzzle();
-    const char* get_path(const char* filename);
+    std::string get_path(std::string filename);
     void set_renderer(SDL_Renderer* renderer);
     void render();
     void render(SDL_Color color);
