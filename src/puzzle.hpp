@@ -15,6 +15,7 @@ typedef struct {
 
 class Puzzle {
 private:
+    const int m_size { 4 };
     SDL_Renderer *m_renderer;
     std::vector<int> m_tiles;
     TTF_Font* m_font;
