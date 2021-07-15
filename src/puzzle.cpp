@@ -99,7 +99,7 @@ bool Puzzle::is_game_over() const {
 
 bool Puzzle::is_solvable() const {
     /* This site has very good explanation */
-    /* www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html */
+    /* https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/ */
 
     const int number_of_tiles = m_size * m_size;
     int inversions = 0;
