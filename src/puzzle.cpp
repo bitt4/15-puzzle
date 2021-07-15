@@ -28,6 +28,9 @@ Puzzle::Puzzle(const char* font)
 Puzzle::~Puzzle(){
     free(m_tiles);
     free(m_current_file_path);
+    // TTF_CloseFont(m_font);
+    // I got segfault when calling TTF_CloseFont(m_font),
+    // but when I removed TTF_Quit() in main.cpp, the segfault disappeared
 }
 
 void Puzzle::swap_tiles(int x, int y){
