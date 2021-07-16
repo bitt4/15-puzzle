@@ -17,7 +17,7 @@ Puzzle::Puzzle(const std::string &font)
         m_tiles[i] = i;
     }
 
-    /* Shuffle tiles (looks random)*/
+    /* Shuffle tiles (looks random) */
     shuffle();
 }
 
@@ -251,7 +251,6 @@ void Puzzle::keydown(const SDL_Keycode key){
             Point empty = get_empty_tile();
             if(empty.y - 1 >= 0){
                 swap_tiles(empty.x, empty.y-1);
-                goto exit;
             }
             break;
         }
@@ -259,7 +258,6 @@ void Puzzle::keydown(const SDL_Keycode key){
             Point empty = get_empty_tile();
             if(empty.y + 1 < m_size){
                 swap_tiles(empty.x, empty.y+1);
-                goto exit;
             }
             break;
         }
@@ -267,7 +265,6 @@ void Puzzle::keydown(const SDL_Keycode key){
             Point empty = get_empty_tile();
             if(empty.x + 1 < m_size){
                 swap_tiles(empty.x+1, empty.y);
-                goto exit;
             }
             break;
         }
@@ -275,14 +272,12 @@ void Puzzle::keydown(const SDL_Keycode key){
             Point empty = get_empty_tile();
             if(empty.x - 1 >= 0){
                 swap_tiles(empty.x-1, empty.y);
-                goto exit;
             }
             break;
         }
         default: {}
         }
 
-    exit:
         if(is_game_over()){
             render(m_win_color);
             m_game_over = true;
