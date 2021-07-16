@@ -36,14 +36,12 @@ void Puzzle::swap_tiles(const int x, const int y){
 
     /* Search for empty tile */
     Point empty = get_empty_tile();
-    int empty_tile_pos_x = empty.x,
-        empty_tile_pos_y = empty.y;
 
     /* Check if target tile is next to empty tile */
-    if(abs(empty_tile_pos_x - x) + abs(empty_tile_pos_y - y) == 1){
+    if(abs(empty.x - x) + abs(empty.y - y) == 1){
         int temp = m_tiles[current_position];
         m_tiles[current_position] = 0;
-        m_tiles[empty_tile_pos_y * m_size + empty_tile_pos_x] = temp;
+        m_tiles[empty.y * m_size + empty.x] = temp;
     }
 }
 
@@ -249,29 +247,29 @@ void Puzzle::keydown(const SDL_Keycode key){
         switch(key){
         case SDLK_DOWN: {
             Point empty = get_empty_tile();
-            if(empty.y - 1 >= 0){
-                swap_tiles(empty.x, empty.y-1);
+            if(empty.y >= 1){
+                swap_tiles(empty.x, empty.y - 1);
             }
             break;
         }
         case SDLK_UP: {
             Point empty = get_empty_tile();
             if(empty.y + 1 < m_size){
-                swap_tiles(empty.x, empty.y+1);
+                swap_tiles(empty.x, empty.y + 1);
             }
             break;
         }
         case SDLK_LEFT: {
             Point empty = get_empty_tile();
             if(empty.x + 1 < m_size){
-                swap_tiles(empty.x+1, empty.y);
+                swap_tiles(empty.x + 1, empty.y);
             }
             break;
         }
         case SDLK_RIGHT: {
             Point empty = get_empty_tile();
-            if(empty.x - 1 >= 0){
-                swap_tiles(empty.x-1, empty.y);
+            if(empty.x >= 1){
+                swap_tiles(empty.x - 1, empty.y);
             }
             break;
         }
