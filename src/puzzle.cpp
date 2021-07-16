@@ -6,7 +6,7 @@ Puzzle::Puzzle(const std::string &font)
 {
     /* Catch errors */
     if(!m_font){
-        print_format_error("An error occured while loading font '%s': %s", font.c_str(), TTF_GetError());
+        show_error("An error occured while loading font '" + font + "': " + TTF_GetError());
         exit(EXIT_FAILURE);
     }
 
@@ -163,26 +163,14 @@ Point Puzzle::get_empty_tile() const {
     return empty;
 }
 
-void Puzzle::print_format_error(const char* format_string, ...){
-
-    char error_message[256];
-    va_list args;
-    va_start(args, format_string);
-
-    int buffer_size = vsnprintf(error_message, 256, format_string, args);
-    if (buffer_size < 0) {
-        fprintf(stderr, "An error occured\n");
-    }
-
-    va_end(args);
-
+void Puzzle::show_error(const std::string &error) const {
 #ifdef _WIN32
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                              "Error",
-                             error_message,
+                             error.c_str(),
                              NULL);
 #else
-    fprintf(stderr, "%s\n", error_message);
+    fprintf(stderr, "%s\n", error.c_str());
 #endif
 }
 

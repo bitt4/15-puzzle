@@ -34,7 +34,7 @@ private:
     void shuffle();
     void restart();
     Point get_empty_tile() const;
-    void print_format_error(const char* format_string, ...);
+    void show_error(const std::string &error) const;
 
 public:
     Puzzle(const std::string &font);
