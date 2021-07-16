@@ -31,8 +31,9 @@ void Puzzle::swap_tile_with_empty(const int x, const int y){
     const int current_position = y * m_size + x;
 
     /* return immediately if user clicks on empty tile */
-    if(m_tiles[current_position] == 0)
+    if(m_tiles[current_position] == 0){
         return;
+    }
 
     /* Search for empty tile */
     Point empty = get_empty_tile();
@@ -88,8 +89,9 @@ void Puzzle::render_value(const SDL_Color &color) const {
 bool Puzzle::is_game_over() const {
     const int number_of_tiles = m_size * m_size;
     for(int i = 0; i < number_of_tiles; ++i){
-        if(m_tiles[i] != (i + 1) % number_of_tiles)
+        if(m_tiles[i] != (i + 1) % number_of_tiles){
             return false;
+        }
     }
 
     return true;
@@ -105,8 +107,9 @@ bool Puzzle::is_solvable() const {
         int current_value = m_tiles[i];
         for(int j = i + 1; j < number_of_tiles; ++j){
             /* Skip blank tile */
-            if(current_value && m_tiles[j] && current_value > m_tiles[j])
+            if(current_value && m_tiles[j] && current_value > m_tiles[j]){
                 inversions++;
+            }
         }
     }
 
@@ -117,21 +120,22 @@ bool Puzzle::is_solvable() const {
     if(m_size & 1){
         return !(inversions & 1);
     } else {
-        if(even_blank_position_from_bottom)
+        if(even_blank_position_from_bottom){
             return inversions & 1;
-        else
+        } else {
             return !(inversions & 1);
+        }
     }
 }
 
 void Puzzle::shuffle(){
-    int current_pos, last_pos = 0;
+    int last_pos = 0;
     srand(time(0));
     const int number_of_tiles = m_size * m_size;
 
     do {
         for(int i = 0; i < 100; ++i){
-            current_pos = rand() % number_of_tiles;
+            int current_pos = rand() % number_of_tiles;
             int tmp = m_tiles[current_pos];
             m_tiles[current_pos] = m_tiles[last_pos];
             m_tiles[last_pos] = tmp;
@@ -183,7 +187,7 @@ void Puzzle::set_renderer(SDL_Renderer* renderer){
 }
 
 void Puzzle::render() const {
-    SDL_Color white = {255, 255, 255, 255};
+    SDL_Color white = { 255, 255, 255, 255 };
     render(white);
 }
 
@@ -214,8 +218,7 @@ void Puzzle::render(const SDL_Color &color) const {
 void Puzzle::click(const int x, const int y){
     if(m_game_over){
         restart();
-    }
-    else {
+    } else {
         swap_tile_with_empty(x, y);
         render();
         if(is_game_over()){
@@ -230,8 +233,7 @@ void Puzzle::keydown(const SDL_Keycode key){
     if(m_game_over){
         restart();
         SDL_RenderPresent(m_renderer);
-    }
-    else {
+    } else {
         switch(key){
         case SDLK_DOWN: {
             Point empty = get_empty_tile();
@@ -267,8 +269,7 @@ void Puzzle::keydown(const SDL_Keycode key){
         if(is_game_over()){
             render(m_win_color);
             m_game_over = true;
-        }
-        else {
+        } else {
             render();
         }
         SDL_RenderPresent(m_renderer);
