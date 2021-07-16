@@ -26,7 +26,7 @@ private:
     bool m_game_over { false };
     const std::string m_base_path;
 
-    void swap_tiles(const int target_x, const int target_y);
+    void swap_tile_with_empty(const int target_x, const int target_y);
     void render_value() const;
     void render_value(const SDL_Color &color) const;
     bool is_game_over() const;

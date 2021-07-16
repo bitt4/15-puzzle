@@ -27,7 +27,7 @@ Puzzle::~Puzzle(){
     // but when I removed TTF_Quit() in main.cpp, the segfault disappeared
 }
 
-void Puzzle::swap_tiles(const int x, const int y){
+void Puzzle::swap_tile_with_empty(const int x, const int y){
     const int current_position = y * m_size + x;
 
     /* return immediately if user clicks on empty tile */
@@ -228,7 +228,7 @@ void Puzzle::click(const int x, const int y){
         restart();
     }
     else {
-        swap_tiles(x, y);
+        swap_tile_with_empty(x, y);
         render();
         if(is_game_over()){
             render(m_win_color);
@@ -248,28 +248,28 @@ void Puzzle::keydown(const SDL_Keycode key){
         case SDLK_DOWN: {
             Point empty = get_empty_tile();
             if(empty.y >= 1){
-                swap_tiles(empty.x, empty.y - 1);
+                swap_tile_with_empty(empty.x, empty.y - 1);
             }
             break;
         }
         case SDLK_UP: {
             Point empty = get_empty_tile();
             if(empty.y + 1 < m_size){
-                swap_tiles(empty.x, empty.y + 1);
+                swap_tile_with_empty(empty.x, empty.y + 1);
             }
             break;
         }
         case SDLK_LEFT: {
             Point empty = get_empty_tile();
             if(empty.x + 1 < m_size){
-                swap_tiles(empty.x + 1, empty.y);
+                swap_tile_with_empty(empty.x + 1, empty.y);
             }
             break;
         }
         case SDLK_RIGHT: {
             Point empty = get_empty_tile();
             if(empty.x >= 1){
-                swap_tiles(empty.x - 1, empty.y);
+                swap_tile_with_empty(empty.x - 1, empty.y);
             }
             break;
         }
