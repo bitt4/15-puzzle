@@ -292,6 +292,12 @@ void Puzzle::keydown(const SDL_Keycode key){
     }
 }
 
+int Puzzle::get_window_width() const {
+    return m_size * (m_tile_width + 1) - 1;
+    // width of one tile is 'm_tile_width', number of tiles in one row/column is 'm_size', and there are 'm_size - 1' lines
+    // between tiles in one row/column, which simplifies to the expression above
+}
+
 bool Puzzle::get_end_game() const {
     return m_end_game;
 }

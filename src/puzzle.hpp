@@ -40,6 +40,7 @@ public:
     Puzzle(const std::string &font);
     ~Puzzle();
     std::string get_path(const std::string& filename) const;
+    int get_window_width() const;
     void set_renderer(SDL_Renderer* renderer);
     void render() const;
     void render(const SDL_Color &color) const;

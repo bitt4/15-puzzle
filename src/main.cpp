@@ -49,13 +49,14 @@ int main(int argc, char *argv[]){
             }
     }
 
-    Puzzle puzzle(font_file.c_str());
+    Puzzle puzzle(font_file);
 
     /* Create window */
     SDL_Window *window = SDL_CreateWindow("15-puzzle",
                                           SDL_WINDOWPOS_CENTERED,
                                           SDL_WINDOWPOS_CENTERED,
-                                          603, 603,
+                                          puzzle.get_window_width(),
+                                          puzzle.get_window_width(), // height is same as width
                                           SDL_WINDOW_SHOWN);
 
     if(window == nullptr){
