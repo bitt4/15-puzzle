@@ -5,13 +5,13 @@
 
 #include "puzzle.hpp"
 
-void displayHelp();
+void display_help();
 
 int main(int argc, char *argv[]){
 
     /* Initialize SDL */
     if(SDL_Init(SDL_INIT_VIDEO) != 0){
-        fprintf(stderr, "SDL video did not initialize successfully: %s\n",SDL_GetError());
+        fprintf(stderr, "SDL video did not initialize successfully: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
 
@@ -38,8 +38,8 @@ int main(int argc, char *argv[]){
                 font_file = optarg;
                 break;
             case 'h':
-                displayHelp();
-                exit(0);
+                display_help();
+                exit(EXIT_SUCCESS);
                 break;
             case '?':
                 fprintf(stderr,
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]){
     return EXIT_SUCCESS;
 }
 
-void displayHelp(){
+void display_help(){
     fprintf(stderr,
             "15 puzzle game\n"
             "Usage: 15-puzzle [OPTION]...\n"

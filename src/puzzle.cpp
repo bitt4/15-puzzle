@@ -36,14 +36,14 @@ void Puzzle::swap_tiles(const int x, const int y){
 
     /* Search for empty tile */
     Point empty = get_empty_tile();
-    int emptyTilePosX = empty.x,
-        emptyTilePosY = empty.y;
+    int empty_tile_pos_x = empty.x,
+        empty_tile_pos_y = empty.y;
 
     /* Check if target tile is next to empty tile */
-    if(abs(emptyTilePosX - x) + abs(emptyTilePosY - y) == 1){
+    if(abs(empty_tile_pos_x - x) + abs(empty_tile_pos_y - y) == 1){
         int temp = m_tiles[current_position];
         m_tiles[current_position] = 0;
-        m_tiles[emptyTilePosY * m_size + emptyTilePosX] = temp;
+        m_tiles[empty_tile_pos_y * m_size + empty_tile_pos_x] = temp;
     }
 }
 
@@ -52,39 +52,39 @@ void Puzzle::render_value() const {
 }
 
 void Puzzle::render_value(const SDL_Color &color) const {
-    SDL_Surface* cellText = 0;
-    SDL_Texture* cellTexture = 0;
+    SDL_Surface* cell_text = 0;
+    SDL_Texture* cell_texture = 0;
 
     for(int y = 0; y < m_size; ++y){
         for(int x = 0; x < m_size; ++x){
             const int current_cell_position = y * m_size + x;
             if(m_tiles[current_cell_position]){
-                int textWidth, textHeight;
+                int text_width, text_height;
 
                 TTF_SizeText(m_font,
                              std::to_string(m_tiles[current_cell_position]).c_str(),
-                             &textWidth,
-                             &textHeight);
+                             &text_width,
+                             &text_height);
 
-                cellText = TTF_RenderText_Blended(m_font,
+                cell_text = TTF_RenderText_Blended(m_font,
                                                   std::to_string(m_tiles[current_cell_position]).c_str(),
                                                   color);
 
-                cellTexture = SDL_CreateTextureFromSurface(m_renderer, cellText);
+                cell_texture = SDL_CreateTextureFromSurface(m_renderer, cell_text);
 
-                SDL_Rect cellRectangle;
-                cellRectangle.x = x * m_tile_width + x + (m_tile_width - textWidth) / 2;
-                cellRectangle.y = y * m_tile_width + y + (m_tile_width - textHeight) / 2;
-                cellRectangle.w = textWidth;
-                cellRectangle.h = textHeight;
+                SDL_Rect cell_rectangle;
+                cell_rectangle.x = x * m_tile_width + x + (m_tile_width - text_width) / 2;
+                cell_rectangle.y = y * m_tile_width + y + (m_tile_width - text_height) / 2;
+                cell_rectangle.w = text_width;
+                cell_rectangle.h = text_height;
 
-                SDL_RenderCopy(m_renderer, cellTexture, NULL, &cellRectangle);
+                SDL_RenderCopy(m_renderer, cell_texture, NULL, &cell_rectangle);
             }
         }
     }
 
-    SDL_FreeSurface(cellText);
-    SDL_DestroyTexture(cellTexture);
+    SDL_FreeSurface(cell_text);
+    SDL_DestroyTexture(cell_texture);
 }
 
 bool Puzzle::is_game_over() const {
@@ -104,24 +104,22 @@ bool Puzzle::is_solvable() const {
     const int number_of_tiles = m_size * m_size;
     int inversions = 0;
     for(int i = 0; i < number_of_tiles - 1; ++i){
-        int currentValue = m_tiles[i];
+        int current_value = m_tiles[i];
         for(int j = i + 1; j < number_of_tiles; ++j){
             /* Skip blank tile */
-            if(currentValue && m_tiles[j] && currentValue > m_tiles[j])
+            if(current_value && m_tiles[j] && current_value > m_tiles[j])
                 inversions++;
         }
     }
 
-    bool evenBlankPositionFromBottom;
-
     Point empty = get_empty_tile();
 
-    evenBlankPositionFromBottom = (empty.y % 2 == 0);
+    bool even_blank_position_from_bottom = (empty.y % 2 == 0);
 
     if(m_size & 1){
         return !(inversions & 1);
     } else {
-        if(evenBlankPositionFromBottom)
+        if(even_blank_position_from_bottom)
             return inversions & 1;
         else
             return !(inversions & 1);
@@ -129,17 +127,17 @@ bool Puzzle::is_solvable() const {
 }
 
 void Puzzle::shuffle(){
-    int currentPos, lastPos = 0;
+    int current_pos, last_pos = 0;
     srand(time(0));
     const int number_of_tiles = m_size * m_size;
 
     do {
         for(int i = 0; i < 100; ++i){
-            currentPos = rand() % number_of_tiles;
-            int tmp = m_tiles[currentPos];
-            m_tiles[currentPos] = m_tiles[lastPos];
-            m_tiles[lastPos] = tmp;
-            lastPos = currentPos;
+            current_pos = rand() % number_of_tiles;
+            int tmp = m_tiles[current_pos];
+            m_tiles[current_pos] = m_tiles[last_pos];
+            m_tiles[last_pos] = tmp;
+            last_pos = current_pos;
         }
     }
     while(!is_solvable());
