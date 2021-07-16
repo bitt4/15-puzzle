@@ -92,8 +92,9 @@ int main(int argc, char *argv[]){
                     puzzle.quit();
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    if(e.button.button == SDL_BUTTON_LEFT)
+                    if(e.button.button == SDL_BUTTON_LEFT){
                         puzzle.click(e.button.x / (150 + e.button.x / 150), e.button.y / (150 + e.button.y / 150));
+                    }
                     break;
                 case SDL_KEYDOWN:
                     switch(e.key.keysym.sym){
