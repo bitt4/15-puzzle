@@ -118,10 +118,14 @@ bool Puzzle::is_solvable() const {
 
     evenBlankPositionFromBottom = (empty.y % 2 == 0);
 
-    if(evenBlankPositionFromBottom)
-        return inversions % 2 == 1;
-    else
-        return inversions % 2 == 0;
+    if(m_size & 1){
+        return !(inversions & 1);
+    } else {
+        if(evenBlankPositionFromBottom)
+            return inversions & 1;
+        else
+            return !(inversions & 1);
+    }
 }
 
 void Puzzle::shuffle(){
