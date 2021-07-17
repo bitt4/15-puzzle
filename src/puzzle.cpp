@@ -1,4 +1,4 @@
-#include "puzzle.hpp"
+#include "../include/puzzle.hpp"
 
 Puzzle::Puzzle(const std::string &font)
     :m_font { TTF_OpenFont(font.c_str(), 72) },

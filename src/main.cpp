@@ -3,7 +3,7 @@
 #include <getopt.h>
 #include <SDL2/SDL.h>
 
-#include "puzzle.hpp"
+#include "../include/puzzle.hpp"
 
 void display_help();
 
