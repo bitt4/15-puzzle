@@ -3,12 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <cstring>
 #include <iostream>
-#include <cstdlib>
-#include <random>
 #include <ctime>
-#include <cstdarg>
 #include <vector>
 
 typedef struct {

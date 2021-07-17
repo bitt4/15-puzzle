@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstdlib>
 #include <getopt.h>
 #include <SDL2/SDL.h>
 
