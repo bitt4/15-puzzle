@@ -1,3 +1,6 @@
+#ifndef PUZZLE_HPP
+#define PUZZLE_HPP
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <cstring>
@@ -49,3 +52,5 @@ public:
     bool get_end_game() const;
     void quit();
 };
+
+#endif // PUZZLE_HPP
