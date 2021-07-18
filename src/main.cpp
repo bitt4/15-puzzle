@@ -9,18 +9,6 @@ int parse_option(const char* option, int l, int r);
 
 int main(int argc, char *argv[]){
 
-    /* Initialize SDL */
-    if(SDL_Init(SDL_INIT_VIDEO) != 0){
-        fprintf(stderr, "SDL video did not initialize successfully: %s\n", SDL_GetError());
-        return EXIT_FAILURE;
-    }
-
-    /* Initialize TTF */
-    if(TTF_Init() == -1){
-        fprintf(stderr, "SDL TTF initialization error: %s\n", TTF_GetError());
-        return EXIT_FAILURE;
-    }
-
     int game_size = 4;
     int tile_width = 150;
     std::string font_file = "assets/font/UbuntuMono-R.ttf";
@@ -57,6 +45,18 @@ int main(int argc, char *argv[]){
                 exit(EXIT_FAILURE);
             default: {}
             }
+    }
+
+    /* Initialize SDL */
+    if(SDL_Init(SDL_INIT_VIDEO) != 0){
+        fprintf(stderr, "SDL video did not initialize successfully: %s\n", SDL_GetError());
+        return EXIT_FAILURE;
+    }
+
+    /* Initialize TTF */
+    if(TTF_Init() == -1){
+        fprintf(stderr, "SDL TTF initialization error: %s\n", TTF_GetError());
+        return EXIT_FAILURE;
     }
 
     Puzzle puzzle(game_size, tile_width, font_file);
