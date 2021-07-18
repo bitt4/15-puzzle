@@ -14,8 +14,8 @@ typedef struct {
 
 class Puzzle {
 private:
-    const int m_size { 4 };
-    const int m_tile_width { 150 };
+    const int m_size;
+    const int m_tile_width;
     SDL_Renderer *m_renderer;
     std::vector<int> m_tiles;
     TTF_Font* m_font;
@@ -36,7 +36,7 @@ private:
     void show_error(const std::string &error) const;
 
 public:
-    Puzzle(const std::string &font);
+    Puzzle(const int game_size, const int tile_width, const std::string &font);
     ~Puzzle();
     std::string get_path(const std::string& filename) const;
     int get_window_width() const;
