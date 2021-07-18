@@ -6,6 +6,7 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
+#include <random>
 
 typedef struct {
     int x;
@@ -24,6 +25,7 @@ private:
     bool m_end_game { false };
     bool m_game_over { false };
     const std::string m_base_path;
+    std::mt19937 m_rng;
 
     void swap_tile_with_empty(const int target_x, const int target_y);
     void render_value() const;

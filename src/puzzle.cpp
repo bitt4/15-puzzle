@@ -4,7 +4,8 @@ Puzzle::Puzzle(const int game_size, const int tile_width, const std::string &fon
     :m_size { game_size },
      m_tile_width { tile_width },
      m_font { TTF_OpenFont(font.c_str(), tile_width / 2) },
-     m_base_path { SDL_GetBasePath() }
+     m_base_path { SDL_GetBasePath() },
+     m_rng { std::mt19937(time(nullptr)) }
 {
     /* Catch errors */
     if(!m_font){
@@ -132,12 +133,11 @@ bool Puzzle::is_solvable() const {
 
 void Puzzle::shuffle(){
     int last_pos = 0;
-    srand(time(0));
     const int number_of_tiles = m_size * m_size;
 
     do {
         for(int i = 0; i < 2 * number_of_tiles; ++i){
-            int current_pos = rand() % number_of_tiles;
+            int current_pos = m_rng() % number_of_tiles;
             int tmp = m_tiles[current_pos];
             m_tiles[current_pos] = m_tiles[last_pos];
             m_tiles[last_pos] = tmp;
