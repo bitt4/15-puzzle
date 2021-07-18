@@ -136,7 +136,7 @@ void Puzzle::shuffle(){
     const int number_of_tiles = m_size * m_size;
 
     do {
-        for(int i = 0; i < 100; ++i){
+        for(int i = 0; i < 2 * number_of_tiles; ++i){
             int current_pos = rand() % number_of_tiles;
             int tmp = m_tiles[current_pos];
             m_tiles[current_pos] = m_tiles[last_pos];
@@ -154,7 +154,8 @@ void Puzzle::restart(){
 }
 
 Point Puzzle::get_empty_tile() const {
-    Point empty;
+    Point empty = { -1, -1 }; // Invalid point (just in case our assumption that
+                              // there is always one empty tile in the game is wrong)
 
     for(int y = 0; y < m_size; ++y){
         for(int x = 0; x < m_size; ++x){
