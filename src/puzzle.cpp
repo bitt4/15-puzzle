@@ -1,7 +1,9 @@
 #include "../include/puzzle.hpp"
 
-Puzzle::Puzzle(const std::string &font)
-    :m_font { TTF_OpenFont(font.c_str(), 72) },
+Puzzle::Puzzle(const int game_size, const int tile_width, const std::string &font)
+    :m_size { game_size },
+     m_tile_width { tile_width },
+     m_font { TTF_OpenFont(font.c_str(), tile_width / 2) },
      m_base_path { SDL_GetBasePath() }
 {
     /* Catch errors */

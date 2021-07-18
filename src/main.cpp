@@ -5,6 +5,7 @@
 #include "../include/puzzle.hpp"
 
 void display_help();
+int parse_option(const char* option, int l, int r);
 
 int main(int argc, char *argv[]){
 
@@ -20,21 +21,31 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    int game_size = 4;
+    int tile_width = 150;
     std::string font_file = "assets/font/UbuntuMono-R.ttf";
 
     static struct option long_options[] = {
                                            {"font", required_argument, NULL, 'f'},
                                            {"help", no_argument, NULL, 'h'},
+                                           {"size", required_argument, NULL, 's'},
+                                           {"tile-width", required_argument, NULL, 'w'},
                                            {NULL, 0, NULL, 0}
     };
 
     int c;
 
-    while ((c = getopt_long(argc, argv, "f:h", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "f:s:w:h", long_options, NULL)) != -1) {
         switch (c)
             {
             case 'f':
                 font_file = optarg;
+                break;
+            case 's':
+                game_size = parse_option(optarg, 2, 25);
+                break;
+            case 'w':
+                tile_width = parse_option(optarg, 25, 250);
                 break;
             case 'h':
                 display_help();
@@ -48,7 +59,7 @@ int main(int argc, char *argv[]){
             }
     }
 
-    Puzzle puzzle(font_file);
+    Puzzle puzzle(game_size, tile_width, font_file);
 
     /* Create window */
     SDL_Window *window = SDL_CreateWindow("15-puzzle",
@@ -92,7 +103,7 @@ int main(int argc, char *argv[]){
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                     if(e.button.button == SDL_BUTTON_LEFT){
-                        puzzle.click(e.button.x / (150 + e.button.x / 150), e.button.y / (150 + e.button.y / 150));
+                        puzzle.click(e.button.x / (tile_width + e.button.x / tile_width), e.button.y / (tile_width + e.button.y / tile_width));
                     }
                     break;
                 case SDL_KEYDOWN:
@@ -128,4 +139,20 @@ void display_help(){
             "  -f PATH,  --font PATH  |  Specify the path to the font file\n"
             "\n"
             );
+}
+
+int parse_option(const char* option, int l, int r){
+    char* end;
+    long int output = strtol(option, &end, 10);
+
+    if(option == end){
+        fprintf(stderr, "Invalid option: %s\n", option);
+        exit(1);
+    }
+    if(l <= output && output <= r){
+        return output;
+    } else {
+        fprintf(stderr, "Option value for '%s' out of range, expected value between '%d' and '%d'\n", option, l, r);
+        exit(1);
+    }
 }
