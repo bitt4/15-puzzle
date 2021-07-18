@@ -95,29 +95,28 @@ int main(int argc, char *argv[]){
 
     SDL_Event e;
 
-    while(!puzzle.get_end_game()){
-        while(SDL_PollEvent(&e)){
-            switch(e.type){
-                case SDL_QUIT:
-                    puzzle.quit();
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    if(e.button.button == SDL_BUTTON_LEFT){
-                        puzzle.click(e.button.x / (tile_width + e.button.x / tile_width), e.button.y / (tile_width + e.button.y / tile_width));
-                    }
-                    break;
-                case SDL_KEYDOWN:
-                    switch(e.key.keysym.sym){
-                        case SDLK_UP:
-                        case SDLK_DOWN:
-                        case SDLK_LEFT:
-                        case SDLK_RIGHT:
-                            puzzle.keydown(e.key.keysym.sym);
-                            break;
-                    }
-                    break;
-                default: {}
+    while(!puzzle.get_end_game() && SDL_WaitEvent(&e)){
+        switch(e.type){
+        case SDL_QUIT:
+            puzzle.quit();
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            // TODO: clicking does not work when game_size is big
+            if(e.button.button == SDL_BUTTON_LEFT){
+                puzzle.click(e.button.x / (tile_width + e.button.x / tile_width), e.button.y / (tile_width + e.button.y / tile_width));
             }
+            break;
+        case SDL_KEYDOWN:
+            switch(e.key.keysym.sym){
+            case SDLK_UP:
+            case SDLK_DOWN:
+            case SDLK_LEFT:
+            case SDLK_RIGHT:
+                puzzle.keydown(e.key.keysym.sym);
+                break;
+            }
+            break;
+        default: {}
         }
     }
 
