@@ -101,9 +101,8 @@ int main(int argc, char *argv[]){
             puzzle.quit();
             break;
         case SDL_MOUSEBUTTONDOWN:
-            // TODO: clicking does not work when game_size is big
             if(e.button.button == SDL_BUTTON_LEFT){
-                puzzle.click(e.button.x / (tile_width + e.button.x / tile_width), e.button.y / (tile_width + e.button.y / tile_width));
+                puzzle.click(e.button.x / (tile_width + 1), e.button.y / (tile_width + 1));
             }
             break;
         case SDL_KEYDOWN:
