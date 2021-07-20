@@ -5,7 +5,7 @@
 #include "../include/puzzle.hpp"
 
 void display_help();
-int parse_option(const char* option, int l, int r);
+int parse_option(const char* value, int l, int r, const char* option);
 
 int main(int argc, char *argv[]){
 
@@ -30,10 +30,10 @@ int main(int argc, char *argv[]){
                 font_file = optarg;
                 break;
             case 's':
-                game_size = parse_option(optarg, 2, 25);
+                game_size = parse_option(optarg, 2, 25, argv[optind - 2]);
                 break;
             case 'w':
-                tile_width = parse_option(optarg, 25, 250);
+                tile_width = parse_option(optarg, 25, 250, argv[optind - 2]);
                 break;
             case 'h':
                 display_help();
@@ -133,24 +133,26 @@ void display_help(){
             "Usage: 15-puzzle [OPTION]...\n"
             "Example: 15-puzzle -h\n"
             "\n"
-            "  -h,       --help       |  Print this help message\n"
-            "  -f PATH,  --font PATH  |  Specify the path to the font file\n"
+            "  -s NUM,  --size NUM       | Set size of game (number of tiles in one row)\n"
+            "  -w NUM,  --tile-width NUM | Set width of one tile\n"
+            "  -h,      --help           | Print this help message\n"
+            "  -f PATH, --font PATH      | Specify the path to the font file\n"
             "\n"
             );
 }
 
-int parse_option(const char* option, int l, int r){
+int parse_option(const char* value, int l, int r, const char* option){
     char* end;
-    long int output = strtol(option, &end, 10);
+    long int output = strtol(value, &end, 10);
 
-    if(option == end){
-        fprintf(stderr, "Invalid option: %s\n", option);
+    if(value == end){
+        fprintf(stderr, "Invalid value '%s' for option '%s'\n", value, option);
         exit(1);
     }
     if(l <= output && output <= r){
         return output;
     } else {
-        fprintf(stderr, "Option value for '%s' out of range, expected value between '%d' and '%d'\n", option, l, r);
+        fprintf(stderr, "Value '%s' for option '%s' is out of range, expected value between '%d' and '%d'\n", value, option, l, r);
         exit(1);
     }
 }
