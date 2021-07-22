@@ -249,13 +249,14 @@ void Puzzle::click(const int x, const int y){
 void Puzzle::keydown(const SDL_Keycode key){
     if(m_game_over){
         restart();
-        SDL_RenderPresent(m_renderer);
     } else {
         switch(key){
         case SDLK_DOWN: {
             Point empty = get_empty_tile();
             if(empty.y >= 1){
                 swap_tile_with_empty(empty.x, empty.y - 1);
+                render_tile(empty.x, empty.y - 1);
+                render_tile(empty.x, empty.y);
             }
             break;
         }
@@ -263,6 +264,8 @@ void Puzzle::keydown(const SDL_Keycode key){
             Point empty = get_empty_tile();
             if(empty.y + 1 < m_size){
                 swap_tile_with_empty(empty.x, empty.y + 1);
+                render_tile(empty.x, empty.y + 1);
+                render_tile(empty.x, empty.y);
             }
             break;
         }
@@ -270,6 +273,8 @@ void Puzzle::keydown(const SDL_Keycode key){
             Point empty = get_empty_tile();
             if(empty.x + 1 < m_size){
                 swap_tile_with_empty(empty.x + 1, empty.y);
+                render_tile(empty.x + 1, empty.y);
+                render_tile(empty.x, empty.y);
             }
             break;
         }
@@ -277,20 +282,20 @@ void Puzzle::keydown(const SDL_Keycode key){
             Point empty = get_empty_tile();
             if(empty.x >= 1){
                 swap_tile_with_empty(empty.x - 1, empty.y);
+                render_tile(empty.x - 1, empty.y);
+                render_tile(empty.x, empty.y);
             }
             break;
         }
-        default: {}
+        default: { return; }
         }
 
         if(is_game_over()){
             render(m_win_color);
             m_game_over = true;
-        } else {
-            render();
         }
-        SDL_RenderPresent(m_renderer);
     }
+    SDL_RenderPresent(m_renderer);
 }
 
 int Puzzle::get_window_width() const {
