@@ -28,8 +28,8 @@ private:
     std::mt19937 m_rng;
 
     void swap_tile_with_empty(const int target_x, const int target_y);
-    void render_value() const;
-    void render_value(const SDL_Color &color) const;
+    void render_tile(const int x, const int y) const;
+    void render_tile(const int x, const int y, const SDL_Color &color) const;
     bool is_game_over() const;
     bool is_solvable() const;
     void shuffle();

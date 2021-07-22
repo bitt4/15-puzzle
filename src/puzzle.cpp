@@ -49,40 +49,47 @@ void Puzzle::swap_tile_with_empty(const int x, const int y){
     }
 }
 
-void Puzzle::render_value() const {
-    render_value(m_font_color);
+void Puzzle::render_tile(const int x, const int y) const {
+    render_tile(x, y, m_font_color);
 }
 
-void Puzzle::render_value(const SDL_Color &color) const {
+void Puzzle::render_tile(const int x, const int y, const SDL_Color &color) const {
     SDL_Surface* cell_text = 0;
     SDL_Texture* cell_texture = 0;
+    SDL_Rect cell_rectangle;
 
-    for(int y = 0; y < m_size; ++y){
-        for(int x = 0; x < m_size; ++x){
-            const int current_cell_position = y * m_size + x;
-            if(m_tiles[current_cell_position]){
-                int text_width, text_height;
+    const int cell_position = y * m_size + x;
 
-                TTF_SizeText(m_font,
-                             std::to_string(m_tiles[current_cell_position]).c_str(),
-                             &text_width,
-                             &text_height);
+    cell_rectangle.x = x * m_tile_width + x + 1;
+    cell_rectangle.y = y * m_tile_width + y + 1;
+    cell_rectangle.w = m_tile_width;
+    cell_rectangle.h = m_tile_width;
 
-                cell_text = TTF_RenderText_Blended(m_font,
-                                                  std::to_string(m_tiles[current_cell_position]).c_str(),
-                                                  color);
+    SDL_RenderFillRect(m_renderer, &cell_rectangle);
 
-                cell_texture = SDL_CreateTextureFromSurface(m_renderer, cell_text);
+    if(m_tiles[cell_position]){
+        int text_width, text_height;
 
-                SDL_Rect cell_rectangle;
-                cell_rectangle.x = x * m_tile_width + x + (m_tile_width - text_width) / 2;
-                cell_rectangle.y = y * m_tile_width + y + (m_tile_width - text_height) / 2;
-                cell_rectangle.w = text_width;
-                cell_rectangle.h = text_height;
+        std::string value = std::to_string(m_tiles[cell_position]);
+        const char* text_value = value.c_str();
 
-                SDL_RenderCopy(m_renderer, cell_texture, NULL, &cell_rectangle);
-            }
-        }
+        TTF_SizeText(m_font,
+                     text_value,
+                     &text_width,
+                     &text_height);
+
+        cell_text = TTF_RenderText_Blended(m_font,
+                                           text_value,
+                                           color);
+
+        cell_texture = SDL_CreateTextureFromSurface(m_renderer, cell_text);
+
+        cell_rectangle.x = x * m_tile_width + x + (m_tile_width - text_width) / 2;
+        cell_rectangle.y = y * m_tile_width + y + (m_tile_width - text_height) / 2;
+        cell_rectangle.w = text_width;
+        cell_rectangle.h = text_height;
+
+        SDL_RenderCopy(m_renderer, cell_texture, NULL, &cell_rectangle);
     }
 
     SDL_FreeSurface(cell_text);
@@ -215,15 +222,22 @@ void Puzzle::render(const SDL_Color &color) const {
                            m_tile_width * i + i);
     }
 
-    render_value(color);
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0xff);
+    for(int y = 0; y < m_size; ++y){
+        for(int x = 0; x < m_size; ++x){
+            render_tile(x, y, color);
+        }
+    }
 }
 
 void Puzzle::click(const int x, const int y){
     if(m_game_over){
         restart();
     } else {
+        Point e = get_empty_tile();
         swap_tile_with_empty(x, y);
-        render();
+        render_tile(x, y);
+        render_tile(e.x, e.y);
         if(is_game_over()){
             render(m_win_color);
             m_game_over = true;
